@@ -1,15 +1,10 @@
-#ifdef EKA2
+#include "../common.mmp"
+
 TARGET		Python.exe
 TARGETTYPE	exe
 UID		0x100039ce 0xF0201515
 EPOCSTACKSIZE 65536
 SECUREID  0xF0201515
-#else
-TARGET		Python.app
-TARGETTYPE	app
-UID		0x100039ce 0xF0201515
-TARGETPATH	\system\apps\Python
-#endif /*EKA2*/
 
 #ifdef EKA2
 CAPABILITY NetworkServices LocalServices ReadUserData WriteUserData Location UserEnvironment PowerMgmt ProtServ SwEvent SurroundingsDD ReadDeviceData WriteDeviceData TrustedUI
@@ -24,9 +19,9 @@ SOURCE		Python.cpp
 USERINCLUDE . ..\core\Symbian
 SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
 
-LIBRARY Python_appui.lib
-LIBRARY euser.lib apparc.lib
-LIBRARY eikcore.lib avkon.lib
+//LIBRARY Python_appui.lib
+//LIBRARY euser.lib apparc.lib
+//LIBRARY eikcore.lib avkon.lib
 
 START RESOURCE Python.rss
 HEADER
@@ -42,3 +37,31 @@ END
 #ifdef EKA2
 VENDORID	  	  0
 #endif /*EKA2*/
+
+
+
+
+
+
+USERINCLUDE 	..\appui ..\appui\appuifw
+USERINCLUDE     ..\core\Include ..\core\Symbian
+USERINCLUDE     ..\core\Objects ..\core\Parser
+USERINCLUDE     ..\core\Python ..\core\Modules
+
+SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
+
+
+LIBRARY  apparc.lib
+LIBRARY         python222.lib euser.lib estlib.lib
+LIBRARY         cone.lib eikcore.lib eikcoctl.lib eikctl.lib eikdlg.lib
+LIBRARY         avkon.lib bafl.lib efsrv.lib commonui.lib apmime.lib charconv.lib
+LIBRARY         estor.lib etext.lib gdi.lib fbscli.lib form.lib
+LIBRARY         aknnotify.lib fntstr.lib
+LIBRARY aknicon.lib egul.lib
+
+LIBRARY uiklaf.lib 
+
+SOURCEPATH ..\appui
+SOURCE		Python_appui.cpp Container.cpp
+SOURCE          appuifw\appuifwmodule.cpp  appuifw\CAppuifwEventBindingArray.cpp
+
