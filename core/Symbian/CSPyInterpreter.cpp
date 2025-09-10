@@ -206,6 +206,23 @@ void CSPyInterpreter::ConstructL()
   PyEval_SaveThread();
 }
 
+/*Changes in 1.4.5 from 1.4.4:
+----------------------------
+
+Feature additions:
+
+* Added the possibility to run Python code in threads that weren't
+  started by Python itself, by adding the functions
+  InitializeForeignThread() and FinalizeForeignThread() to the
+  CSPyInterpreter class. For details see the section "Python/C API
+  Extensions" of the API Reference.
+  
+  IMPORTANT NOTE:
+  I am removing this as this won't be required for this use case,
+  but mainly because it contains Dll::Tls()
+  See PyS60 v1.4.5 docs for more information.
+*/
+/*
 EXPORT_C void CSPyInterpreter::InitializeForeignThread()
 {
   __ASSERT_ALWAYS(!Dll::Tls(), 
@@ -226,6 +243,7 @@ EXPORT_C void CSPyInterpreter::FinalizeForeignThread()
   PyThread_exit_thread();
   SPy_tls_finalize(0); // don't destroy globals
 }
+*/
 
 EXPORT_C TInt CSPyInterpreter::RunScript(int argc, char** argv)
 {

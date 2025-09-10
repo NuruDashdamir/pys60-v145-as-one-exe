@@ -41,7 +41,7 @@ VENDORID	  	  0
 
 
 
-
+//APPUIFW START
 
 USERINCLUDE 	..\appui ..\appui\appuifw
 USERINCLUDE     ..\core\Include ..\core\Symbian
@@ -50,9 +50,9 @@ USERINCLUDE     ..\core\Python ..\core\Modules
 
 SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
 
-
+//LIBRARY python222.lib
 LIBRARY  apparc.lib
-LIBRARY         python222.lib euser.lib estlib.lib
+LIBRARY         euser.lib estlib.lib
 LIBRARY         cone.lib eikcore.lib eikcoctl.lib eikctl.lib eikdlg.lib
 LIBRARY         avkon.lib bafl.lib efsrv.lib commonui.lib apmime.lib charconv.lib
 LIBRARY         estor.lib etext.lib gdi.lib fbscli.lib form.lib
@@ -65,3 +65,140 @@ SOURCEPATH ..\appui
 SOURCE		Python_appui.cpp Container.cpp
 SOURCE          appuifw\appuifwmodule.cpp  appuifw\CAppuifwEventBindingArray.cpp
 
+//APPUIFW END
+
+
+// PYTHON222 START
+
+MACRO         HAVE_ACTIVESCHEDULERWAIT
+MACRO         HAVE_HUGE_VAL
+OPTION        CW -w nounusedarg
+
+
+/* Downgrade initialized data error, #145, for RVCT */
+/* XXX does not work */
+  OPTION        ARMCC --diag_warning 145
+  
+/* ALWAYS_BUILD_AS_ARM */ 
+/* Generic optimizations */
+OPTION ARMCC -O3 -Otime --memaccess -UL41 --cpu 5T
+
+#ifndef WINS
+MACRO 	USE_GLOBAL_DATA_HACK
+//EPOCALLOWDLLDATA
+#ifndef EKA2
+EPOCDATALINKADDRESS 0x33000000
+#endif
+#endif 
+
+
+//NOTREQ SEEMS USERINCLUDE   Symbian Objects Parser Python include Modules
+
+LIBRARY       estlib.lib euser.lib efsrv.lib apmime.lib charconv.lib bafl.lib hal.lib
+#ifdef EKA2
+LIBRARY       tzclient.lib
+#endif
+
+SOURCEPATH ..\core
+SOURCE        Symbian\CSPyInterpreter.cpp Symbian\config.c Symbian\python_globals.cpp
+SOURCE        Symbian\symbian_python_ext_util.cpp Symbian\e32module.cpp
+#ifdef WITH_DLC
+SOURCE        Symbian\dlc.cpp
+#endif
+
+
+SOURCE        Python\bltinmodule.c
+SOURCE        Python\exceptions.c
+SOURCE        Python\ceval.c
+SOURCE        Python\compile.c
+SOURCE        Python\codecs.c
+SOURCE        Python\dynload_symbian.cpp
+
+SOURCE        Python\errors.c
+SOURCE        Python\frozenmain.c
+SOURCE        Python\future.c
+SOURCE        Python\getargs.c
+SOURCE        Python\getcompiler.c
+SOURCE        Python\getcopyright.c
+SOURCE        Python\getmtime.c
+SOURCE        Python\getplatform.c
+SOURCE        Python\getversion.c
+SOURCE        Python\graminit.c
+SOURCE        Python\hypot.c
+SOURCE        Python\import.c
+SOURCE        Python\importdl.c
+SOURCE        Python\marshal.c
+SOURCE        Python\modsupport.c
+SOURCE        Python\mystrtoul.c
+SOURCE        Python\pyfpe.c
+SOURCE        Python\pystate.c
+SOURCE        Python\pythonrun.c
+SOURCE        Python\sigcheck.c
+SOURCE        Python\structmember.c
+SOURCE        Python\symtable.c
+SOURCE        Python\sysmodule.c
+SOURCE        Python\thread.cpp
+SOURCE        Python\traceback.c
+SOURCE        Python\getopt.c
+SOURCE        Python\mysnprintf.cpp
+SOURCE        Python\strtod.c
+SOURCE        Python\atof.c
+
+SOURCE        Objects\abstract.c
+SOURCE        Objects\bufferobject.c
+SOURCE        Objects\cellobject.c
+SOURCE        Objects\classobject.c
+SOURCE        Objects\cobject.c
+SOURCE        Objects\complexobject.c
+SOURCE        Objects\descrobject.c
+SOURCE        Objects\dictobject.c
+SOURCE        Objects\fileobject.c
+SOURCE        Objects\floatobject.c
+SOURCE        Objects\frameobject.c
+SOURCE        Objects\funcobject.c
+SOURCE        Objects\intobject.c
+SOURCE        Objects\listobject.c
+SOURCE        Objects\longobject.c
+SOURCE        Objects\methodobject.c
+SOURCE        Objects\moduleobject.c
+SOURCE        Objects\object.c
+SOURCE        Objects\rangeobject.c
+SOURCE        Objects\sliceobject.c
+SOURCE        Objects\stringobject.c
+SOURCE        Objects\tupleobject.c
+SOURCE        Objects\typeobject.c
+SOURCE        Objects\unicodeobject.c
+SOURCE        Objects\unicodectype.c
+SOURCE        Objects\iterobject.c
+SOURCE        Objects\weakrefobject.c
+SOURCE        Objects\structseq.c
+
+SOURCE        Parser\myreadline.c
+SOURCE        Parser\acceler.c
+SOURCE        Parser\grammar1.c
+SOURCE        Parser\listnode.c
+SOURCE        Parser\node.c
+SOURCE        Parser\parser.c
+SOURCE        Parser\parsetok.c
+SOURCE        Parser\tokenizer.c
+SOURCE        Parser\bitset.c
+SOURCE        Parser\metagrammar.c
+
+SOURCE        Modules\_codecsmodule.c
+SOURCE        Modules\_sre.c
+SOURCE        Modules\_weakref.c
+SOURCE        Modules\binascii.c
+SOURCE        Modules\cStringIO.c
+SOURCE        Modules\errnomodule.c
+SOURCE        Modules\gcmodule.c
+SOURCE        Modules\getbuildinfo.c
+SOURCE        Modules\getpath.c
+SOURCE        Modules\mathmodule.c
+SOURCE        Modules\md5c.c
+SOURCE        Modules\md5module.c
+SOURCE        Modules\operator.c
+SOURCE        Modules\posixmodule.c
+SOURCE        Modules\structmodule.c
+SOURCE        Modules\threadmodule.c
+SOURCE        Modules\timemodule.c
+SOURCE        Modules\xreadlinesmodule.c

@@ -25,6 +25,7 @@
 #include "python_globals.h"
 
 extern "C" {
+  static SPy_Tls* DLL_TLS_GLOBAL_WORKAROUND;
 #ifdef USE_GLOBAL_DATA_HACK 
   static SPy_Python_globals *__python_globals=NULL;
   //static int __python_globals=0;
@@ -44,12 +45,12 @@ extern "C" {
     //if (!__python_globals)
     //  __python_globals=((((SPy_Tls*)Dll::Tls())->globals));
     //return __python_globals;
-    return ((((SPy_Tls*)Dll::Tls())->globals));
+    return (DLL_TLS_GLOBAL_WORKAROUND->globals);
   }
 
   DL_EXPORT(SPy_Python_thread_locals*) SPy_get_thread_locals()
   {
-    return ((((SPy_Tls*)Dll::Tls())->thread_locals));
+    return (DLL_TLS_GLOBAL_WORKAROUND->thread_locals);
   }
 
   extern void _Py_None_Init();             // Objects\object.c
@@ -92,19 +93,19 @@ int SPy_tls_initialize(SPy_Python_globals* pg)
   ptls->globals = pg;
 
   memset(ptls->thread_locals, 0, sizeof(SPy_Python_thread_locals));
-  Dll::SetTls(ptls);
+  DLL_TLS_GLOBAL_WORKAROUND = ptls; // Dll::SetTls(ptls);
   
   return 0;
 }
 
 void SPy_tls_finalize(int fini_globals)
 {
-  SPy_Tls* ptls = (SPy_Tls*)Dll::Tls();
+  SPy_Tls* ptls = DLL_TLS_GLOBAL_WORKAROUND; // (SPy_Tls*)Dll::Tls();
   delete ptls->thread_locals;
   if (fini_globals)
     delete ptls->globals;
   delete ptls;
-  Dll::SetTls(0);
+  DLL_TLS_GLOBAL_WORKAROUND = 0; // Dll::SetTls(0);
 }
 
 int SPy_globals_initialize(void* interpreter)
