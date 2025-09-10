@@ -1,0 +1,41 @@
+;
+; Installation file for Python Application Manager
+;
+; Copyright (c) 2005-2006 Nokia Corporation
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+; You may obtain a copy of the License at
+;
+;     http://www.apache.org/licenses/LICENSE-2.0
+;
+; Unless required by applicable law or agreed to in writing, software
+; distributed under the License is distributed on an "AS IS" BASIS,
+; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+; See the License for the specific language governing permissions and
+; limitations under the License.
+
+
+;Languages
+&EN
+;
+; UID is the app's UID
+;
+#{"Python Installer"},(0xF0201512),1,11,0
+[0x101F7961], 0, 0, 0, {"Series60ProductID"}
+
+
+;Localised Vendor name
+%{"Vendor-EN"}
+
+
+;
+; Files to install
+;
+"\Epoc32\release\gcce\urel\appmgr.exe"                     -"!:\sys\bin\appmgr.exe"
+"\Epoc32\data\z\resource\apps\appmgr.rsc"             	-"!:\resource\apps\appmgr.rsc"
+"\Epoc32\release\gcce\urel\pyrecog.dll"                    -"!:\sys\bin\pyrecog.dll"
+
+
+".\appmgr_default.py"                                           -"c:\private\F0201512\default.py"
+

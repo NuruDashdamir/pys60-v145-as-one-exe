@@ -1,0 +1,44 @@
+#ifdef EKA2
+TARGET		Python.exe
+TARGETTYPE	exe
+UID		0x100039ce 0xF0201515
+EPOCSTACKSIZE 65536
+SECUREID  0xF0201515
+#else
+TARGET		Python.app
+TARGETTYPE	app
+UID		0x100039ce 0xF0201515
+TARGETPATH	\system\apps\Python
+#endif /*EKA2*/
+
+#ifdef EKA2
+CAPABILITY NetworkServices LocalServices ReadUserData WriteUserData Location UserEnvironment PowerMgmt ProtServ SwEvent SurroundingsDD ReadDeviceData WriteDeviceData TrustedUI
+#endif
+
+//NOSTRICTDEF
+//DEFFILE		Python_app.frz
+OPTION 	CW -w nounusedarg
+
+SOURCE		Python.cpp
+
+USERINCLUDE . ..\core\Symbian
+SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
+
+LIBRARY Python_appui.lib
+LIBRARY euser.lib apparc.lib
+LIBRARY eikcore.lib avkon.lib
+
+START RESOURCE Python.rss
+HEADER
+TARGETPATH      resource\apps
+//LANG  SC //only needed for localized application
+END
+
+START RESOURCE Python_reg.rss
+TARGETPATH \private\10003a3f\apps
+END
+
+
+#ifdef EKA2
+VENDORID	  	  0
+#endif /*EKA2*/

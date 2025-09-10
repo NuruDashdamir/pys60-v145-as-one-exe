@@ -1,0 +1,84 @@
+; Copyright (c) 2006 - 2007 Nokia Corporation
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+; You may obtain a copy of the License at
+;
+;     http://www.apache.org/licenses/LICENSE-2.0
+;
+; Unless required by applicable law or agreed to in writing, software
+; distributed under the License is distributed on an "AS IS" BASIS,
+; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+; See the License for the specific language governing permissions and
+; limitations under the License.
+;
+; Installation file for Python for Series 60
+;
+;Languages
+&EN
+;
+; UID is the app's UID
+;
+#{"Python Script Shell"},(0xF0201515),1,4,5,TYPE=SISAPP
+
+;Localised Vendor name
+%{"Nokia"}
+;Unique Vendor name
+:"Nokia"
+
+
+[0x101F7961], 0, 0, 0, {"Series60ProductID"}
+
+
+
+; Files to install
+;
+"\Epoc32\release\armv5\urel\Python.exe"           -"!:\sys\bin\Python.exe"
+
+  "\Epoc32\data\z\resource\apps\Python.rsc"        -"!:\resource\apps\Python.rsc"
+
+
+  "\Epoc32\data\z\PRIVATE\10003A3F\APPS\python_reg.rsc"-"!:\Private\10003a3f\import\apps\python_reg.rsc"
+  "\Epoc32\data\z\resource\apps\Python_aif.mif"   -"!:\resource\apps\Python_aif.mif"
+
+
+; Scripts
+;
+"T:\src\app\default.py"                   -"!:\private\F0201515\default.py"
+"T:\src\app\filebrowser.py"               -"!:\Python\filebrowser.py"
+"T:\src\app\dir_iter.py"                  -"c:\resource\dir_iter.py"
+"T:\src\app\series60_console.py"          -"c:\resource\series60_console.py"
+"T:\src\app\interactive_console.py"       -"c:\resource\interactive_console.py"
+
+
+; Dummy file for bt_console.py created configure file removal during Python uninstallation:
+;
+"T:\src\app\dummy"                -"c:\system\apps\Python\btconsole_conf.txt"
+;
+; Extras
+"T:\src\extras\snake.py"       -"!:\Python\snake.py"
+"T:\src\extras\imgviewer.py"     -"!:\Python\imgviewer.py"
+"T:\src\extras\ball.py"     -"!:\Python\ball.py"
+"T:\src\extras\gles_demo.py"     -"!:\Python\gles_demo.py"
+"T:\src\extras\simplecube.py"     -"!:\Python\simplecube.py"
+
+
+
+
+; Installing this file will enable the display of panic codes when an application crashes.
+; Removed for now, since at least some firmware versions of E61 already include this file and 
+; thus installation will fail on them if this is included. See bug 1554589.
+; "T:\src\app\dummy" -"c:\resource\errrd"
+
+
+; Backup registration
+"T:\src\app\backup_registration.xml"        -"!:\private\F0201515\backup_registration.xml"
+
+
+; Test
+
+
+
+
+
+

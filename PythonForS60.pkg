@@ -1,0 +1,181 @@
+; Copyright (c) 2005 - 2008 Nokia Corporation
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+; You may obtain a copy of the License at
+;
+;     http://www.apache.org/licenses/LICENSE-2.0
+;
+; Unless required by applicable law or agreed to in writing, software
+; distributed under the License is distributed on an "AS IS" BASIS,
+; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+; See the License for the specific language governing permissions and
+; limitations under the License.
+;
+; Installation file for Python for Series 60
+;
+;Languages
+&EN
+;
+; UID is the app's UID
+;
+#{"Python for S60"},(0xF0201510),1,4,5,TYPE=SISAPP
+
+;Localised Vendor name
+%{"Nokia"}
+;Unique Vendor name
+:"Nokia"
+
+
+[0x101F7961], 0, 0, 0, {"Series60ProductID"}
+
+; Embeds Python for Symbian OS
+;@"T:\src\core\PythonForSymbianOS.SIS",(0xF0201511)
+
+
+; Files to install
+;
+"\Epoc32\release\armv5\urel\Python_appui.dll"     -"!:\sys\bin\python_appui.dll"
+
+  "\Epoc32\data\z\resource\apps\appuifwmodule.rsc"   -"!:\resource\apps\appuifwmodule.rsc"
+
+
+; Backup registration - no private folder, hence using the import mechanism
+"T:\src\core\backup_registration.xml"        -"!:\private\10202D56\import\packages\F0201510\backup_registration.xml"
+
+
+; Wrappers and other needed files
+;
+"T:\src\appui\appuifw\appuifw.py"             	-"c:\resource\appuifw.py"
+"T:\src\core\lib\weakref.py"                  -"c:\resource\weakref.py"
+"T:\src\core\lib\UserDict.py"                 -"c:\resource\UserDict.py"
+"T:\src\ext\graphics\graphics.py"               -"c:\resource\graphics.py"
+"T:\src\ext\contacts\eka2\contacts.py"          -"c:\resource\contacts.py"
+"T:\src\ext\telephone\telephone.py"	            -"c:\resource\telephone.py"
+"T:\src\ext\recorder\audio.py"		              -"c:\resource\audio.py"
+"T:\src\ext\keycapture\keycapture.py"		        -"c:\resource\keycapture.py"
+"T:\src\ext\topwindow\topwindow.py"		          -"c:\resource\topwindow.py"
+"T:\src\ext\gps\locationacq.py"		          -"c:\resource\locationacq.py"
+"T:\src\ext\gps\positioning.py"		          -"c:\resource\positioning.py"
+"T:\src\ext\gles\gles_utils.py"		            -"c:\resource\gles_utils.py"
+"T:\src\ext\logs\logs.py"		                -"c:\resource\logs.py"
+"T:\src\ext\location\location.py"		            -"c:\resource\location.py"
+
+"T:\src\ext\messaging\messaging.py"		          -"c:\resource\messaging.py"
+
+
+
+
+  "T:\src\ext\camera\camera.py"		-"c:\resource\camera.py"
+
+
+"T:\src\ext\sysinfo\sysinfo.py"		-"c:\resource\sysinfo.py"
+"T:\src\ext\calendar\eka2\calendar.py"	-"c:\resource\calendar.py"
+"T:\src\ext\socket\socket.py"		  -"c:\resource\socket.py"
+"T:\src\ext\socket\select.py"		  -"c:\resource\select.py"
+
+
+;
+; Server script launchpad
+; 
+"\Epoc32\release\armv5\urel\Python_launcher.exe"  -"!:\sys\bin\python_launcher.exe"
+
+
+;
+; PYDs
+;
+"\Epoc32\release\armv5\urel\e32db.pyd"           -"c:\sys\bin\e32db.pyd"
+"\Epoc32\release\armv5\urel\e32socket.pyd"       -"c:\sys\bin\e32socket.pyd"
+"\Epoc32\release\armv5\urel\_messaging.pyd"       -"c:\sys\bin\_messaging.pyd"
+
+"\Epoc32\release\armv5\urel\_location.pyd"        -"c:\sys\bin\_location.pyd"
+
+
+"\Epoc32\release\armv5\urel\_contacts.pyd"       -"c:\sys\bin\_contacts.pyd"
+"\Epoc32\release\armv5\urel\_sysinfo.pyd"        -"c:\sys\bin\_sysinfo.pyd"
+"\Epoc32\release\armv5\urel\zlib.pyd"       	-"c:\sys\bin\zlib.pyd"
+  "\Epoc32\release\armv5\urel\_camera.pyd"       	-"c:\sys\bin\_camera.pyd"
+
+"\Epoc32\release\armv5\urel\_graphics.pyd"       -"c:\sys\bin\_graphics.pyd"
+"\Epoc32\release\armv5\urel\_telephone.pyd"      -"c:\sys\bin\_telephone.pyd"
+"\Epoc32\release\armv5\urel\_recorder.pyd"      	-"c:\sys\bin\_recorder.pyd"
+"\Epoc32\release\armv5\urel\_calendar.pyd"      	-"c:\sys\bin\_calendar.pyd"
+"\Epoc32\release\armv5\urel\_keycapture.pyd"      -"c:\sys\bin\_keycapture.pyd"
+"\Epoc32\release\armv5\urel\_topwindow.pyd"      	-"c:\sys\bin\_topwindow.pyd"
+"\Epoc32\release\armv5\urel\_locationacq.pyd"      	-"c:\sys\bin\_locationacq.pyd"
+"\Epoc32\release\armv5\urel\inbox.pyd"      	-"c:\sys\bin\inbox.pyd"
+"\Epoc32\release\armv5\urel\gles.pyd"     -"c:\sys\bin\gles.pyd"
+"\Epoc32\release\armv5\urel\glcanvas.pyd"      	-"c:\sys\bin\glcanvas.pyd"
+"\Epoc32\release\armv5\urel\_logs.pyd"      	    -"c:\sys\bin\_logs.pyd"
+"\Epoc32\release\armv5\urel\globalui.pyd"       -"c:\sys\bin\globalui.pyd"
+
+
+
+
+; Python for Symbian OS files
+"\Epoc32\release\armv5\urel\Python222.dll"              -"!:\sys\bin\python222.dll"
+
+;
+; Library modules
+;
+"T:\src\core\Lib\btconsole.py"                                          -"c:\resource\btconsole.py"
+"T:\src\core\Lib\anydbm.py"                                             -"c:\resource\anydbm.py"
+"T:\src\core\Lib\whichdb.py"                                            -"c:\resource\whichdb.py"
+"T:\src\core\Lib\e32dbm.py"                                             -"c:\resource\e32dbm.py"
+"T:\src\core\Lib\key_codes.py"                                          -"c:\resource\key_codes.py"
+"T:\src\core\Lib\os.py"                                                 -"c:\resource\os.py"
+"T:\src\core\Lib\pack.py"                                               -"c:\resource\pack.py"
+"T:\src\core\Lib\ntpath.py"                                             -"c:\resource\ntpath.py"
+"T:\src\core\Lib\shutil.py"                                             -"c:\resource\shutil.py"
+"T:\src\core\Lib\code.py"                                               -"c:\resource\code.py"
+"T:\src\core\Lib\codeop.py"                                             -"c:\resource\codeop.py"
+"T:\src\core\Lib\linecache.py"                                          -"c:\resource\linecache.py"
+"T:\src\core\Lib\traceback.py"                                          -"c:\resource\traceback.py"
+"T:\src\core\Lib\stat.py"                                               -"c:\resource\stat.py"
+"T:\src\core\Lib\types.py"                                              -"c:\resource\types.py"
+"T:\src\core\Lib\__future__.py"                                         -"c:\resource\__future__.py"
+"T:\src\core\Lib\re.py"                                                 -"c:\resource\re.py"
+"T:\src\core\Lib\sre.py"                                                -"c:\resource\sre.py"
+"T:\src\core\Lib\sre_compile.py"                                        -"c:\resource\sre_compile.py"
+"T:\src\core\Lib\sre_constants.py"                                      -"c:\resource\sre_constants.py"
+"T:\src\core\Lib\sre_parse.py"                                          -"c:\resource\sre_parse.py"
+"T:\src\core\Lib\site.py"                                               -"c:\resource\site.py"
+"T:\src\core\Lib\codecs.py"                                             -"c:\resource\codecs.py"
+"T:\src\core\Lib\atexit.py"                                             -"c:\resource\atexit.py"
+"T:\src\core\Lib\base64.py"                                             -"c:\resource\base64.py"
+"T:\src\core\Lib\httplib.py"                                            -"c:\resource\httplib.py"
+"T:\src\core\Lib\getpass.py"                                            -"c:\resource\getpass.py"
+"T:\src\core\Lib\mimetools.py"                                          -"c:\resource\mimetools.py"
+"T:\src\core\Lib\quopri.py"                                             -"c:\resource\quopri.py"
+"T:\src\core\Lib\rfc822.py"                                             -"c:\resource\rfc822.py"
+"T:\src\core\Lib\urlparse.py"                                           -"c:\resource\urlparse.py"
+"T:\src\core\Lib\uu.py"                                                 -"c:\resource\uu.py"
+"T:\src\core\Lib\keyword.py"                                            -"c:\resource\keyword.py"
+"T:\src\core\Lib\warnings.py"                                           -"c:\resource\warnings.py"
+"T:\src\core\Lib\string.py"                                             -"c:\resource\string.py"
+"T:\src\core\Lib\StringIO.py"                                           -"c:\resource\StringIO.py"
+"T:\src\core\Lib\whrandom.py"                                           -"c:\resource\whrandom.py"
+"T:\src\core\Lib\copy.py"                                               -"c:\resource\copy.py"
+"T:\src\core\Lib\repr.py"                                               -"c:\resource\repr.py"
+"T:\src\core\Lib\copy_reg.py"                                           -"c:\resource\copy_reg.py"
+"T:\src\core\Lib\urllib.py"                                             -"c:\resource\urllib.py"
+"T:\src\core\Lib\zipfile.py"                                            -"c:\resource\zipfile.py"
+"T:\src\core\Lib\random.py"                                             -"c:\resource\random.py"
+"T:\src\core\Lib\encodings\__init__.py"                                 -"c:\resource\encodings\__init__.py"
+"T:\src\core\Lib\encodings\aliases.py"                                  -"c:\resource\encodings\aliases.py"
+"T:\src\core\Lib\encodings\ascii.py"                                    -"c:\resource\encodings\ascii.py"
+"T:\src\core\Lib\encodings\base64_codec.py"                             -"c:\resource\encodings\base64_codec.py"
+"T:\src\core\Lib\encodings\charmap.py"                                  -"c:\resource\encodings\charmap.py"
+"T:\src\core\Lib\encodings\hex_codec.py"                                -"c:\resource\encodings\hex_codec.py"
+"T:\src\core\Lib\encodings\latin_1.py"                                  -"c:\resource\encodings\latin_1.py"
+"T:\src\core\Lib\encodings\raw_unicode_escape.py"                       -"c:\resource\encodings\raw_unicode_escape.py"
+"T:\src\core\Lib\encodings\unicode_escape.py"                           -"c:\resource\encodings\unicode_escape.py"
+"T:\src\core\Lib\encodings\unicode_internal.py"                         -"c:\resource\encodings\unicode_internal.py"
+"T:\src\core\Lib\encodings\utf_16.py"                                   -"c:\resource\encodings\utf_16.py"
+"T:\src\core\Lib\encodings\utf_16_be.py"                                -"c:\resource\encodings\utf_16_be.py"
+"T:\src\core\Lib\encodings\utf_16_le.py"                                -"c:\resource\encodings\utf_16_le.py"
+"T:\src\core\Lib\encodings\utf_7.py"                                    -"c:\resource\encodings\utf_7.py"
+"T:\src\core\Lib\encodings\utf_8.py"                                    -"c:\resource\encodings\utf_8.py"
+"T:\src\core\Lib\encodings\uu_codec.py"                                 -"c:\resource\encodings\uu_codec.py"
+"T:\src\core\Lib\encodings\zlib_codec.py"                               -"c:\resource\encodings\zlib_codec.py"
+
