@@ -63,6 +63,11 @@ void CAmarettoAppUi::SetActiveTab(TInt aIndex)
   ((CAmarettoContainer*)iContainer)->SetActiveTab(aIndex);
 }
 
+void CAmarettoAppUi::DisablePointerForwarding(TBool aValue)
+{
+  ((CAmarettoContainer*)iContainer)->DisablePointerForwarding(aValue);
+}
+
 TInt CAmarettoAppUi::SetHostedControl(CCoeControl* aControl,
                                       CAmarettoCallback* aFunc)
 {

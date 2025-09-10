@@ -2711,6 +2711,30 @@ available_fonts(PyObject* /*self*/)
   return list;
 }
 
+extern "C" PyObject *
+touch_enabled(PyObject* /*self*/)
+{
+  PyObject* rval = Py_False;
+  RLibrary avkonDll;
+
+  /* PenEnabled() is not present in 3rdEd SDK, so we try to load avkon and
+   * find the ordinal number for that function */
+  if ( avkonDll.Load( _L( "avkon.dll" ) ) == KErrNone ) {
+    #ifdef __WINS__
+    TLibraryFunction pen_enabled = avkonDll.Lookup( PEN_ENABLED_ORDINAL_WINS );
+    #else
+    TLibraryFunction pen_enabled = avkonDll.Lookup( PEN_ENABLED_ORDINAL_ARM );
+    #endif
+    if (pen_enabled != NULL) {
+      if (pen_enabled())
+        rval = Py_True;
+    }
+    avkonDll.Close();   
+  }
+  Py_INCREF(rval);
+  return rval;
+}
+
 
 /*
  *
@@ -3440,13 +3464,17 @@ public:
   {}
   virtual ~CAppuifwCanvas() {;}
   virtual void ConstructL(const TRect& aRect,
-                          const CCoeControl* aParent);
+                          const CCoeControl* aParent, CAmarettoAppUi* aAppui);
 
 protected:
   virtual void SizeChanged();
 
 private:
+  const CCoeControl *myParent;
+  CAmarettoAppUi* myAppui;
+  TBool touch_enabled_flag;
   virtual void Draw(const TRect& aRect) const;
+  virtual void HandlePointerEventL(const TPointerEvent& aPointerEvent);
   virtual TKeyResponse OfferKeyEventL(const TKeyEvent& aKeyEvent, 
 				      TEventCode aType) {
     PyObject *arg=NULL, *ret=NULL;
@@ -3476,8 +3504,52 @@ private:
   PyObject *iDrawCallback, *iEventCallback, *iResizeCallback;
 };
 
+void CAppuifwCanvas::HandlePointerEventL(const TPointerEvent& aPointerEvent)
+{
+  PyObject *arg=NULL, *ret=NULL;
+  
+  if( !touch_enabled_flag )
+	return;
+
+  /* All basic touch events cause this callback function to be hit before the
+   * container's HandlePointerEventL function. This is because the Canvas is
+   * above the Container and Canvas is a window-owning control as it derives
+   * from CCoeControl and is created using CreateWindow. To call any callback
+   * functions registered by the user using the bind() API, we have to call
+   * the Container's callback function and this is done explicitly using 
+   * myParent below. 
+   * For advanced touch events like EDrag, EnableDragEvents is called and
+   * as a result of this the CCoeControl::HandlePointerEventL base class call
+   * in CAmarettoContainer::HandlePointerEventL in turn calls this function. 
+   * The application crashes as a result of the inifinte loop. 
+   * To get around this we disable and enable the CCoeControl base class call
+   * in the Container class. */
+  myAppui->DisablePointerForwarding(ETrue);
+  CONST_CAST(CCoeControl*, myParent)->HandlePointerEventL(aPointerEvent);
+  myAppui->DisablePointerForwarding(EFalse);
+
+  if (!iEventCallback) 
+    return;
+  arg = Py_BuildValue("({s:i, s:(ii), s:i})", "type", aPointerEvent.iType
+  		+ 0x101, "pos", aPointerEvent.iPosition.iX,
+  		aPointerEvent.iPosition.iY, "modifiers", aPointerEvent.iModifiers);
+  if (!arg) {
+    PyErr_Print();
+	return;
+  }
+  PyEval_RestoreThread(PYTHON_TLS->thread_state);
+  ret = PyEval_CallObject(iEventCallback, arg);
+  Py_DECREF(arg);
+  if (!ret)
+    PyErr_Print();
+  else
+    Py_DECREF(ret);
+  PyEval_SaveThread();
+}
+
+
 void CAppuifwCanvas::ConstructL(const TRect& aRect,
-				const CCoeControl* aParent)
+				const CCoeControl* aParent, CAmarettoAppUi* aAppui)
 {
   //SetContainerWindowL(*aParent);
   
@@ -3486,6 +3558,15 @@ void CAppuifwCanvas::ConstructL(const TRect& aRect,
       else */
   __ASSERT_DEBUG(aParent, User::Panic(_L("CAppuifwCanvas"), 2)); // This control must have a parent.
   CreateWindowL(aParent);
+  
+  if(touch_enabled(NULL)){
+    EnableDragEvents();
+    touch_enabled_flag = ETrue;
+  }
+  else
+	touch_enabled_flag = EFalse;
+  myParent = aParent;
+  myAppui = aAppui;
   SetRect(aRect);
   ActivateL();
 }
@@ -3598,7 +3679,7 @@ new_Canvas_object(PyObject* /*self*/, PyObject* args)
   if (!(op->ob_control = new CAppuifwCanvas(op->ob_drawcallback, 
 					    op->ob_eventcallback, op->ob_resizecallback))) FAILMEM(3);
 
-  TRAPD(error, op->ob_control->ConstructL(appui->ClientRect(), appui->iContainer));
+  TRAPD(error, op->ob_control->ConstructL(appui->ClientRect(), appui->iContainer, appui));
   if (error != KErrNone) 
     FAILSYMBIAN(3);
   Py_XINCREF(op->ob_drawcallback);
@@ -3632,10 +3713,10 @@ Canvas__drawapi(Canvas_object *self, PyObject* /*args*/)
 extern "C" PyObject *
 Canvas_bind(Canvas_object *self, PyObject* args)
 {
-  int key_code;
+  int key_code=0, x1=0, x2=0, y1=0, y2=0;
   PyObject* c;
   
-  if (!PyArg_ParseTuple(args, "iO", &key_code, &c))
+  if (!PyArg_ParseTuple(args, "iO|((ii)(ii))", &key_code, &c, &x1, &y1, &x2, &y2))
     return NULL;
   
   if (c == Py_None)
@@ -3650,9 +3731,23 @@ Canvas_bind(Canvas_object *self, PyObject* args)
       return PyErr_NoMemory();
 
   SAppuifwEventBinding bind_info;
+    /* These are unique hex values assigned to the Pointer Events. These are
+   * defined in key_codes.py */
+  if (key_code >= 0x101 && key_code <= 0x10A) {
+    bind_info.iType = SAmarettoEventInfo::EPointer;
+    memset(&bind_info.iKeyEvent, 0, sizeof(bind_info.iKeyEvent));
+    bind_info.iPointerEvent.iType = TPointerEvent::TType(key_code - 0x101);
+    bind_info.iPointerEvent.iModifiers = 0;
+    bind_info.iPointerRect.SetRect(x1, y1, x2, y2);
+  }
+  else {
   bind_info.iType = SAmarettoEventInfo::EKey;
+  memset(&bind_info.iPointerEvent, 0, sizeof(bind_info.iPointerEvent));
+  bind_info.iPointerEvent.iType = TPointerEvent::TType(-1);
   bind_info.iKeyEvent.iCode = key_code;
   bind_info.iKeyEvent.iModifiers = 0;
+  }
+  
   bind_info.iCb = c;
   Py_XINCREF(c);
 
@@ -5067,6 +5162,7 @@ extern "C" {
     {"multi_query", (PyCFunction)Multi_line_data_query_dialog, METH_VARARGS, NULL},
     {"popup_menu", (PyCFunction)popup_menu, METH_VARARGS, NULL},
     {"available_fonts", (PyCFunction)available_fonts, METH_NOARGS, NULL},
+	{"touch_enabled", (PyCFunction)touch_enabled, METH_NOARGS, NULL},
     {"Form", (PyCFunction)new_Form_object, METH_VARARGS|METH_KEYWORDS, NULL},
     {"Text", (PyCFunction)new_Text_object, METH_VARARGS, NULL},
     {"Canvas", (PyCFunction)new_Canvas_object, METH_VARARGS, NULL},

@@ -41,7 +41,7 @@ ${{if S60_VERSION >= 28
 LIBRARY aknicon.lib egul.lib
 }}
 ${{if S60_VERSION >= 30
-LIBRARY uiklaf.lib 
+LIBRARY uiklaf.lib apparc.lib
 }}
 
 SOURCE		Python_appui.cpp Container.cpp

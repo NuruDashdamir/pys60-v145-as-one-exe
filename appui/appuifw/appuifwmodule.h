@@ -24,7 +24,7 @@
 #define __APPUIFWMODULE_H
 
 #include "buildconfig.h"
-
+#include "symbian_python_ext_util.h"
 #include "popup_field_hack.h" // Form
 
 #include <eikenv.h>
@@ -113,6 +113,10 @@ _LIT8(KSymbol, "symbol");
 _LIT8(KDense, "dense");
 _LIT8(KCheckboxStyle, "checkbox");
 _LIT8(KCheckmarkStyle, "checkmark");
+
+/* Ordinal numbers of PenEnabled function in avkon DLL for WINSCW and ARMV5 */
+#define PEN_ENABLED_ORDINAL_WINS 3184
+#define PEN_ENABLED_ORDINAL_ARM 4251
 
 
 #define MY_APPUI ((get_app())->ob_data->appui)

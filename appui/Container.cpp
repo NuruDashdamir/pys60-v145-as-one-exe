@@ -36,6 +36,7 @@ void CAmarettoContainer::ConstructL(const TRect& aRect)
   CreateWindowL();
   iTop = NULL;
   SetRect(aRect);
+  iPointerForwardDisabled = EFalse;
   ActivateL();
 }
 
@@ -160,4 +161,28 @@ CAmarettoContainer::OfferKeyEventL(const TKeyEvent& aKeyEvent, TEventCode aType)
   }
   else
     return EKeyWasNotConsumed;
+}
+
+void CAmarettoContainer::DisablePointerForwarding(TBool aValue)
+{
+	iPointerForwardDisabled = aValue;
+}
+
+void CAmarettoContainer::HandlePointerEventL(const TPointerEvent& aPointerEvent)
+{
+    // Check if touch is enabled or not
+    if( !touch_enabled(NULL) ) {
+        return;
+    }
+    if (iTop && iEventCallback) {
+          SAmarettoEventInfo event_info;
+          event_info.iType = SAmarettoEventInfo::EPointer;
+          memset(&event_info.iKeyEvent, 0, sizeof(event_info.iKeyEvent));
+          event_info.iPointerEvent = aPointerEvent;
+          iEventCallback->Call((void*)&event_info);
+        }
+    // Call base class method, that forwards pointer event to the right child
+	// component. We disable this for Canvas object.
+    if(!iPointerForwardDisabled)
+    	CCoeControl::HandlePointerEventL(aPointerEvent);
 }

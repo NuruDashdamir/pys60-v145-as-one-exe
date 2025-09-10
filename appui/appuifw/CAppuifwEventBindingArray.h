@@ -39,6 +39,7 @@ NONSHARABLE_CLASS(CAppuifwEventBindingArray) : public CBase
   CAppuifwEventBindingArray():iKey(5) {;}
   ~CAppuifwEventBindingArray();
   void InsertEventBindingL(SAppuifwEventBinding&);
+  void ClearEventBinding(const SAppuifwEventBinding&);
   TInt Callback(SAmarettoEventInfo& aEvent);
 
  private:

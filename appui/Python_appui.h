@@ -52,11 +52,13 @@ class CAmarettoCallback : public CBase {
 
 struct SAmarettoEventInfo
 {
-  enum TEventType {EKey};
+  enum TEventType {EKey, EPointer};
   TEventType iType;
   /* TCoeEvent iControlEvent; */
   TKeyEvent iKeyEvent;
   /* TEventCode iEventType; */
+  TPointerEvent iPointerEvent;
+  TRect iPointerRect;
 };
 
 #define KMaxPythonMenuExtensions 30
@@ -75,7 +77,8 @@ NONSHARABLE_CLASS(CAmarettoAppUi) : public CAknAppUi
   ~CAmarettoAppUi();
 
   IMPORT_C void RunScriptL(const TDesC& aFileName, const TDesC* aArg=NULL);
-
+  
+  void DisablePointerForwarding(TBool);
   TBool ProcessCommandParametersL(TApaCommand, TFileName&, const TDesC8&);
   friend TInt AsyncRunCallbackL(TAny*);
   void ReturnFromInterpreter(TInt aError);

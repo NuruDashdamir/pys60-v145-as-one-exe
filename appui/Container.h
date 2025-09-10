@@ -31,6 +31,15 @@
 #include <aknnavide.h>
 #include <akntabgrp.h>
 #include "Python_appui.h"
+#include "symbian_python_ext_util.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+int touch_enabled(PyObject *);
+#ifdef __cplusplus
+}
+#endif
 
 #ifndef EKA2
 class CAmarettoContainer : public CCoeControl, MCoeControlObserver
@@ -47,6 +56,8 @@ public:
   void Refresh() {SizeChanged(); DrawNow();}
   void EnableTabsL(const CDesCArray* aTabTexts, CAmarettoCallback* aFunc);
   void SetActiveTab(TInt aIndex);
+  void HandlePointerEventL(const TPointerEvent& aPointerEvent);
+  void DisablePointerForwarding(TBool aValue);
 
 protected:
   void ConstructL(const TRect&);
@@ -66,6 +77,7 @@ private:
   CCoeControl* iTop;
   CAmarettoCallback* iTabCallback;
   CAmarettoCallback* iEventCallback;
+  TBool iPointerForwardDisabled;
 };
 
 #endif /* __CONTAINER_H */
