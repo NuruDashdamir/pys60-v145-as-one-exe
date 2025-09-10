@@ -1,0 +1,330 @@
+; Copyright (c) 2006 - 2007 Nokia Corporation
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+; You may obtain a copy of the License at
+;
+;     http://www.apache.org/licenses/LICENSE-2.0
+;
+; Unless required by applicable law or agreed to in writing, software
+; distributed under the License is distributed on an "AS IS" BASIS,
+; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+; See the License for the specific language governing permissions and
+; limitations under the License.
+;
+; Installation file for Python for Series 60
+;
+;Languages
+&EN
+;
+; UID is the app's UID
+;
+#{"Python Script Shell"},(${{PYS60_UID_SCRIPTSHELL}}),${{PYS60_VERSION_MAJOR}},${{PYS60_VERSION_MINOR}},${{PYS60_VERSION_MICRO}},TYPE=SISAPP
+
+${{if S60_VERSION>=30
+;Localised Vendor name
+%{"Nokia"}
+;Unique Vendor name
+:"Nokia"
+}}
+
+${{if S60_VERSION>=30
+[${{S60_REQUIRED_PLATFORM_UID}}], 0, 0, 0, {"Series60ProductID"}
+$else
+(${{S60_REQUIRED_PLATFORM_UID}}), 0, 0, 0, {"Series60ProductID"}
+}}
+
+${{if S60_VERSION>12 and S60_VERSION<30
+; Embeds Python Application Manager
+@"${{SRC_DIR}}\appmgr\AppMgr.SIS",(${{PYS60_UID_APPMGR}})
+}}
+
+; Files to install
+;
+${{if S60_VERSION>=30
+"\Epoc32\release\${{DEVICE_PLATFORM}}\${{DEVICE_BUILD}}\Python.exe"           -"!:\sys\bin\Python.exe"
+$else
+"\Epoc32\release\${{DEVICE_PLATFORM}}\${{DEVICE_BUILD}}\Python.app"           -"!:\system\apps\Python\Python.app"
+}}
+
+${{if S60_VERSION==12
+  "\Epoc32\release\${{DEVICE_PLATFORM}}\${{DEVICE_BUILD}}\Python.rsc"           -"!:\system\apps\Python\Python.rsc"
+  "\Epoc32\release\${{DEVICE_PLATFORM}}\${{DEVICE_BUILD}}\Python.aif"           -"!:\system\apps\Python\Python.aif"
+$elif S60_VERSION<30
+  "\Epoc32\data\z\system\apps\python\Python.rsc"   -"!:\system\apps\Python\Python.rsc"
+$else
+  "\Epoc32\data\z\resource\apps\Python.rsc"        -"!:\resource\apps\Python.rsc"
+}}
+
+${{if S60_VERSION<28 
+  "\Epoc32\data\z\system\apps\python\python.aif"   -"!:\system\apps\Python\Python.aif"
+$elif S60_VERSION<30
+  "\Epoc32\data\z\PRIVATE\10003A3F\APPS\python_reg.rsc"-"!:\Private\10003a3f\apps\python_reg.rsc"
+  "\Epoc32\data\z\system\apps\python\Python_aif.mif"   -"!:\system\apps\Python\Python_aif.mif"
+$else
+  "\Epoc32\data\z\PRIVATE\10003A3F\APPS\python_reg.rsc"-"!:\Private\10003a3f\import\apps\python_reg.rsc"
+  "\Epoc32\data\z\resource\apps\Python_aif.mif"   -"!:\resource\apps\Python_aif.mif"
+}}
+
+; Scripts
+;
+${{if S60_VERSION<30 
+"${{SRC_DIR}}\app\default.py"                   -"!:\system\apps\Python\default.py"
+"${{SRC_DIR}}\app\filebrowser.py"               -"!:\system\apps\Python\filebrowser.py"
+"${{SRC_DIR}}\app\dir_iter.py"                  -"!:\system\libs\dir_iter.py"
+"${{SRC_DIR}}\app\series60_console.py"          -"!:\system\libs\series60_console.py"
+"${{SRC_DIR}}\app\interactive_console.py"       -"!:\system\libs\interactive_console.py"
+$else
+"${{SRC_DIR}}\app\default.py"                   -"!:\private\${{PYS60_UID_SCRIPTSHELL[2:]}}\default.py"
+"${{SRC_DIR}}\app\filebrowser.py"               -"!:\Python\filebrowser.py"
+"${{SRC_DIR}}\app\dir_iter.py"                  -"c:\resource\dir_iter.py"
+"${{SRC_DIR}}\app\series60_console.py"          -"c:\resource\series60_console.py"
+"${{SRC_DIR}}\app\interactive_console.py"       -"c:\resource\interactive_console.py"
+}}
+
+; Dummy file for bt_console.py created configure file removal during Python uninstallation:
+;
+"${{SRC_DIR}}\app\dummy"                -"c:\system\apps\Python\btconsole_conf.txt"
+;
+; Extras
+${{if S60_VERSION<30 
+"${{SRC_DIR}}\extras\snake.py"       -"!:\system\apps\Python\snake.py"
+"${{SRC_DIR}}\extras\imgviewer.py"     -"!:\system\apps\Python\imgviewer.py"
+"${{SRC_DIR}}\extras\ball.py"     -"!:\system\apps\Python\ball.py"
+"${{SRC_DIR}}\extras\keyviewer.py"     -"!:\system\apps\Python\keyviewer.py"
+${{if S60_VERSION>=26 
+"${{SRC_DIR}}\extras\simplecube.py"     -"!:\system\apps\Python\simplecube.py"
+"${{SRC_DIR}}\extras\gles_demo.py"     -"!:\system\apps\Python\gles_demo.py"
+}}
+$else
+"${{SRC_DIR}}\extras\snake.py"       -"!:\Python\snake.py"
+"${{SRC_DIR}}\extras\imgviewer.py"     -"!:\Python\imgviewer.py"
+"${{SRC_DIR}}\extras\ball.py"     -"!:\Python\ball.py"
+"${{SRC_DIR}}\extras\gles_demo.py"     -"!:\Python\gles_demo.py"
+"${{SRC_DIR}}\extras\simplecube.py"     -"!:\Python\simplecube.py"
+}}
+
+${{if S60_VERSION==12
+; Python Application Manager
+"\Epoc32\release\${{DEVICE_PLATFORM}}\${{DEVICE_BUILD}}\appmgr.app"                   -"!:\system\apps\appmgr\appmgr.app"
+"\Epoc32\release\${{DEVICE_PLATFORM}}\${{DEVICE_BUILD}}\appmgr.rsc"                   -"!:\system\apps\appmgr\appmgr.rsc"
+"\Epoc32\release\${{DEVICE_PLATFORM}}\${{DEVICE_BUILD}}\appmgr.aif"                  -"!:\system\apps\appmgr\appmgr.aif"
+"\Epoc32\release\${{DEVICE_PLATFORM}}\${{DEVICE_BUILD}}\pyrecog.mdl"                 -"!:\system\recogs\pyrecog.mdl"
+"${{SRC_DIR}}\appmgr\appmgr_default.py"              -"!:\system\apps\appmgr\default.py"
+"${{SRC_DIR}}\appmgr\pyapp_template_pre_SDK20.tmp"   -"!:\system\apps\appmgr\pyapp_template.tmp"
+"${{SRC_DIR}}\appmgr\pyrsc_template_pre_SDK20.tmp"   -"!:\system\apps\appmgr\pyrsc_template.tmp"
+"${{SRC_DIR}}\appmgr\uid_offset_in_app"              -"!:\system\apps\appmgr\uid_offset_in_app"
+}}
+
+${{if S60_VERSION==30
+; Installing this file will enable the display of panic codes when an application crashes.
+; Removed for now, since at least some firmware versions of E61 already include this file and 
+; thus installation will fail on them if this is included. See bug 1554589.
+; "${{SRC_DIR}}\app\dummy" -"c:\resource\errrd"
+}}
+
+${{if S60_VERSION>=30 
+; Backup registration
+"${{SRC_DIR}}\app\backup_registration.xml"        -"!:\private\${{PYS60_UID_SCRIPTSHELL[2:]}}\backup_registration.xml"
+}}
+
+; Test
+${{if TEST_FLAG=="ON"
+"${{TEST_DIR}}\regrtest.py"     -"!:\resource\test\regrtest.py"
+"${{TEST_DIR}}\autotest.py"     -"!:\python\autotest.py"
+
+;modules needed for testing
+"${{TEST_DIR}}\modules\pickle.py"   -"!:\resource\pickle.py"
+"${{TEST_DIR}}\modules\getopt.py"   -"!:\resource\getopt.py"
+"${{TEST_DIR}}\modules\re_tests.py"   -"!:\resource\re_tests.py"
+"${{TEST_DIR}}\modules\statvfs.py"       -"!:\resource\statvfs.py"
+"${{TEST_DIR}}\modules\tempfile.py"      -"!:\resource\tempfile.py"
+"${{TEST_DIR}}\modules\test_support.py"  -"!:\resource\test_support.py"
+"${{TEST_DIR}}\modules\unittest.py"      -"!:\resource\unittest.py"
+"${{TEST_DIR}}\modules\aifc.py"      -"!:\resource\aifc.py"
+"${{TEST_DIR}}\modules\asynchat.py"      -"!:\resource\asynchat.py"
+"${{TEST_DIR}}\modules\asyncore.py"      -"!:\resource\asyncore.py"
+"${{TEST_DIR}}\modules\badsyntax_future3.py"      -"!:\resource\badsyntax_future3.py"
+"${{TEST_DIR}}\modules\badsyntax_future4.py"      -"!:\resource\badsyntax_future4.py"
+"${{TEST_DIR}}\modules\badsyntax_future5.py"      -"!:\resource\badsyntax_future5.py"
+"${{TEST_DIR}}\modules\badsyntax_future6.py"      -"!:\resource\badsyntax_future6.py"
+"${{TEST_DIR}}\modules\badsyntax_future7.py"      -"!:\resource\badsyntax_future7.py"
+"${{TEST_DIR}}\modules\badsyntax_nocaret.py"      -"!:\resource\badsyntax_nocaret.py"
+"${{TEST_DIR}}\modules\bisect.py"      -"!:\resource\bisect.py"
+"${{TEST_DIR}}\modules\cgi.py"      -"!:\resource\cgi.py"
+"${{TEST_DIR}}\modules\chunk.py"      -"!:\resource\chunk.py"
+"${{TEST_DIR}}\modules\commands.py"      -"!:\resource\commands.py"
+"${{TEST_DIR}}\modules\ConfigParser.py"      -"!:\resource\ConfigParser.py"
+"${{TEST_DIR}}\modules\Cookie.py"      -"!:\resource\Cookie.py"
+"${{TEST_DIR}}\modules\descr1.py"      -"!:\resource\descr1.py"
+"${{TEST_DIR}}\modules\descr2.py"      -"!:\resource\descr2.py"
+"${{TEST_DIR}}\modules\descr3.py"      -"!:\resource\descr3.py"
+"${{TEST_DIR}}\modules\descr4.py"      -"!:\resource\descr4.py"
+"${{TEST_DIR}}\modules\descr5.py"      -"!:\resource\descr5.py"
+"${{TEST_DIR}}\modules\descr6.py"      -"!:\resource\descr6.py"
+"${{TEST_DIR}}\modules\difflib.py"      -"!:\resource\difflib.py"
+"${{TEST_DIR}}\modules\doctest.py"      -"!:\resource\doctest.py"
+"${{TEST_DIR}}\modules\ftplib.py"      -"!:\resource\ftplib.py"
+"${{TEST_DIR}}\modules\gopherlib.py"      -"!:\resource\gopherlib.py"
+"${{TEST_DIR}}\modules\inspect.py"      -"!:\resource\inspect.py"
+"${{TEST_DIR}}\modules\locale.py"      -"!:\resource\locale.py"
+"${{TEST_DIR}}\modules\mhlib.py"      -"!:\resource\mhlib.py"
+"${{TEST_DIR}}\modules\mimetypes.py"      -"!:\resource\mimetypes.py"
+"${{TEST_DIR}}\modules\multifile.py"      -"!:\resource\multifile.py"
+"${{TEST_DIR}}\modules\pickletester.py"      -"!:\resource\pickletester.py"
+"${{TEST_DIR}}\modules\pkg_maker.py"      -"!:\resource\pkg_maker.py"
+"${{TEST_DIR}}\modules\posixpath.py"      -"!:\resource\posixpath.py"
+"${{TEST_DIR}}\modules\pprint.py"      -"!:\resource\pprint.py"
+"${{TEST_DIR}}\modules\pyclbr.py"      -"!:\resource\pyclbr.py"
+"${{TEST_DIR}}\modules\Queue.py"      -"!:\resource\Queue.py"
+"${{TEST_DIR}}\modules\string_tests.py"      -"!:\resource\string_tests.py"
+"${{TEST_DIR}}\modules\tempfile.py"      -"!:\resource\tempfile.py"
+"${{TEST_DIR}}\modules\testcodec.py"      -"!:\resource\testcodec.py"
+"${{TEST_DIR}}\modules\test_support.py"      -"!:\resource\test_support.py"
+"${{TEST_DIR}}\modules\token.py"      -"!:\resource\tokenpy"
+"${{TEST_DIR}}\modules\tokenize.py"      -"!:\resource\tokenize.py"
+"${{TEST_DIR}}\modules\tokenize_tests.py"      -"!:\resource\tokenize_tests.py"
+"${{TEST_DIR}}\modules\urllib2.py"      -"!:\resource\urllib2py"
+"${{TEST_DIR}}\modules\UserString.py"      -"!:\resource\UserString.py"
+"${{TEST_DIR}}\modules\xmllib.py"      -"!:\resource\xmllib.py"
+
+;test cases
+"${{TEST_DIR}}\test_augassign.py"        -"!:\resource\test\test_augassign.py"
+"${{TEST_DIR}}\test_b1.py"               -"!:\resource\test\test_b1.py"
+"${{TEST_DIR}}\test_b2.py"               -"!:\resource\test\test_b2.py"
+"${{TEST_DIR}}\test_base64.py"           -"!:\resource\test\test_base64.py"
+"${{TEST_DIR}}\test_binascii.py"         -"!:\resource\test\test_binascii.py"
+"${{TEST_DIR}}\test_binop.py"            -"!:\resource\test\test_binop.py"
+"${{TEST_DIR}}\test_bisect.py"            -"!:\resource\test\test_bisect.py"
+"${{TEST_DIR}}\test_call.py"                 -"!:\resource\test\test_call.py"
+"${{TEST_DIR}}\test_charmapcodec.py"                 -"!:\resource\test\test_charmapcodec.py"
+"${{TEST_DIR}}\test_class.py"                 -"!:\resource\test\test_class.py"
+"${{TEST_DIR}}\test_codecs.py"                 -"!:\resource\test\test_codecs.py"
+"${{TEST_DIR}}\test_codeop.py"                 -"!:\resource\test\test_codeop.py"
+"${{TEST_DIR}}\test_coercion.py"                 -"!:\resource\test\test_coercion.py"
+"${{TEST_DIR}}\test_compare.py"                 -"!:\resource\test\test_compare.py"                 
+"${{TEST_DIR}}\test_complex.py"                 -"!:\resource\test\test_complex.py"
+"${{TEST_DIR}}\test_contains.py"                 -"!:\resource\test\test_contains.py"
+"${{TEST_DIR}}\test_copy_reg.py"                 -"!:\resource\test\test_copy_reg.py"
+"${{TEST_DIR}}\test_errno.py"                 -"!:\resource\test\test_errno.py"
+"${{TEST_DIR}}\test_frozen.py"                 -"!:\resource\test\test_frozen.py"
+"${{TEST_DIR}}\test_funcattrs.py"                 -"!:\resource\test\test_funcattrs.py"
+"${{TEST_DIR}}\test_future.py"                 -"!:\resource\test\test_future.py"
+"${{TEST_DIR}}\test_future1.py"                 -"!:\resource\test\test_future1.py"
+"${{TEST_DIR}}\test_future2.py"                 -"!:\resource\test\test_future2.py"
+"${{TEST_DIR}}\test_future3.py"                 -"!:\resource\test\test_future3.py"
+"${{TEST_DIR}}\test_global.py"                 -"!:\resource\test\test_global.py"
+"${{TEST_DIR}}\test_grammar.py"                 -"!:\resource\test\test_grammar.py"
+"${{TEST_DIR}}\test_hash.py"                 -"!:\resource\test\test_hash.py"
+"${{TEST_DIR}}\test_httplib.py"                 -"!:\resource\test\test_httplib.py"
+"${{TEST_DIR}}\test_iter.py"                 -"!:\resource\test\test_iter.py"
+"${{TEST_DIR}}\test_marshal.py"                 -"!:\resource\test\test_marshal.py"
+"${{TEST_DIR}}\test_math.py"                 -"!:\resource\test\test_math.py"
+"${{TEST_DIR}}\test_md5.py"                 -"!:\resource\test\test_md5.py"
+"${{TEST_DIR}}\test_mimetools.py"                 -"!:\resource\test\test_mimetools.py"
+"${{TEST_DIR}}\test_mimetypes.py"                 -"!:\resource\test\test_mimetypes.py"
+"${{TEST_DIR}}\test_mutants.py"                 -"!:\resource\test\test_mutants.py"
+"${{TEST_DIR}}\test_ntpath.py"                 -"!:\resource\test\test_ntpath.py"
+"${{TEST_DIR}}\test_opcodes.py"                 -"!:\resource\test\test_opcodes.py"
+"${{TEST_DIR}}\test_operations.py"                 -"!:\resource\test\test_operations.py"
+"${{TEST_DIR}}\test_operator.py"                 -"!:\resource\test\test_operator.py"
+"${{TEST_DIR}}\test_pickle.py"                 -"!:\resource\test\test_pickle.py"
+"${{TEST_DIR}}\test_pkg.py"                 -"!:\resource\test\test_pkg.py"
+"${{TEST_DIR}}\test_pkgimport.py"                 -"!:\resource\test\test_pkgimport.py"
+"${{TEST_DIR}}\test_pow.py"                 -"!:\resource\test\test_pow.py"
+"${{TEST_DIR}}\test_quopri.py"                 -"!:\resource\test\test_quopri.py"
+"${{TEST_DIR}}\test_random.py"                 -"!:\resource\test\test_random.py"
+"${{TEST_DIR}}\test_repr.py"                 -"!:\resource\test\test_repr.py"
+"${{TEST_DIR}}\test_rfc822.py"                 -"!:\resource\test\test_rfc822.py"
+"${{TEST_DIR}}\test_scope.py"                 -"!:\resource\test\test_scope.py"
+"${{TEST_DIR}}\test_sre.py"                 -"!:\resource\test\test_sre.py"
+"${{TEST_DIR}}\test_StringIO.py"                 -"!:\resource\test\test_StringIO.py"
+"${{TEST_DIR}}\test_struct.py"                 -"!:\resource\test\test_struct.py"
+"${{TEST_DIR}}\test_structseq.py"                 -"!:\resource\test\test_structseq.py"
+"${{TEST_DIR}}\test_tempfile.py"                 -"!:\resource\test\test_tempfile.py"
+"${{TEST_DIR}}\test_thread.py"                 -"!:\resource\test\test_thread.py"
+"${{TEST_DIR}}\test_threaded_import.py"                 -"!:\resource\test\test_threaded_import.py"
+"${{TEST_DIR}}\test_time.py"                 -"!:\resource\test\test_time.py"
+"${{TEST_DIR}}\test_traceback.py"                 -"!:\resource\test\test_traceback.py"
+"${{TEST_DIR}}\test_types.py"                 -"!:\resource\test\test_types.py"
+"${{TEST_DIR}}\test_unary.py"                 -"!:\resource\test\test_unary.py"
+"${{TEST_DIR}}\test_unicode.py"                 -"!:\resource\test\test_unicode.py"
+"${{TEST_DIR}}\test_unpack.py"                 -"!:\resource\test\test_unpack.py"
+"${{TEST_DIR}}\test_urllib.py"                 -"!:\resource\test\test_urllib.py"
+"${{TEST_DIR}}\test_userdict.py"                 -"!:\resource\test\test_userdict.py"
+"${{TEST_DIR}}\test_uu.py"                 -"!:\resource\test\test_uu.py"
+"${{TEST_DIR}}\test___future__.py"                 -"!:\resource\test\test___future__.py"
+"${{TEST_DIR}}\__init__.py"                 -"!:\resource\test\__init__.py"
+
+;test results
+"${{TEST_DIR}}\output\test_asynchat"        -"!:\resource\test\output\test_asynchat"
+"${{TEST_DIR}}\output\test_augassign"        -"!:\resource\test\output\test_augassign"
+"${{TEST_DIR}}\output\test_bastion"        -"!:\resource\test\output\test_bastion"
+"${{TEST_DIR}}\output\test_binascii"        -"!:\resource\test\output\test_binascii"
+"${{TEST_DIR}}\output\test_builtin"        -"!:\resource\test\output\test_builtin"
+"${{TEST_DIR}}\output\test_cfgparser"        -"!:\resource\test\output\test_cfgparser"
+"${{TEST_DIR}}\output\test_cgi"        -"!:\resource\test\output\test_cgi"
+"${{TEST_DIR}}\output\test_charmapcodec"        -"!:\resource\test\output\test_charmapcodec"
+"${{TEST_DIR}}\output\test_class"        -"!:\resource\test\output\test_class"
+"${{TEST_DIR}}\output\test_coercion"        -"!:\resource\test\output\test_coercion"
+"${{TEST_DIR}}\output\test_compare"        -"!:\resource\test\output\test_compare"
+"${{TEST_DIR}}\output\test_compile"        -"!:\resource\test\output\test_compile"
+"${{TEST_DIR}}\output\test_cookie"        -"!:\resource\test\output\test_cookie"
+"${{TEST_DIR}}\output\test_exceptions"        -"!:\resource\test\output\test_exceptions"
+"${{TEST_DIR}}\output\test_extcall"        -"!:\resource\test\output\test_extcall"
+"${{TEST_DIR}}\output\test_frozen"        -"!:\resource\test\output\test_frozen"
+"${{TEST_DIR}}\output\test_future"        -"!:\resource\test\output\test_future"
+"${{TEST_DIR}}\output\test_gettext"        -"!:\resource\test\output\test_gettext"
+"${{TEST_DIR}}\output\test_global"        -"!:\resource\test\output\test_global"
+"${{TEST_DIR}}\output\test_grammar"        -"!:\resource\test\output\test_grammar"
+"${{TEST_DIR}}\output\test_httplib"        -"!:\resource\test\output\test_httplib"
+"${{TEST_DIR}}\output\test_linuxaudiodev"        -"!:\resource\test\output\test_linuxaudiodev"
+"${{TEST_DIR}}\output\test_longexp"        -"!:\resource\test\output\test_longexp"
+"${{TEST_DIR}}\output\test_math"        -"!:\resource\test\output\test_math"
+"${{TEST_DIR}}\output\test_md5"        -"!:\resource\test\output\test_md5"
+"${{TEST_DIR}}\output\test_mimetools"        -"!:\resource\test\output\test_mimetools"
+"${{TEST_DIR}}\output\test_MimeWriter"        -"!:\resource\test\output\test_MimeWriter"
+"${{TEST_DIR}}\output\test_mmap"        -"!:\resource\test\output\test_mmap"
+"${{TEST_DIR}}\output\test_new"        -"!:\resource\test\output\test_new"
+"${{TEST_DIR}}\output\test_nis"        -"!:\resource\test\output\test_nis"
+"${{TEST_DIR}}\output\test_opcodes"        -"!:\resource\test\output\test_opcodes"
+"${{TEST_DIR}}\output\test_openpty"        -"!:\resource\test\output\test_openpty"
+"${{TEST_DIR}}\output\test_operations"        -"!:\resource\test\output\test_operations"
+"${{TEST_DIR}}\output\test_pkg"        -"!:\resource\test\output\test_pkg"
+"${{TEST_DIR}}\output\test_poll"        -"!:\resource\test\output\test_poll"
+"${{TEST_DIR}}\output\test_popen2"        -"!:\resource\test\output\test_popen2"
+"${{TEST_DIR}}\output\test_posixpath"        -"!:\resource\test\output\test_posixpath"
+"${{TEST_DIR}}\output\test_pow"        -"!:\resource\test\output\test_pow"
+"${{TEST_DIR}}\output\test_profile"        -"!:\resource\test\output\test_profile"
+"${{TEST_DIR}}\output\test_pty"        -"!:\resource\test\output\test_pty"
+"${{TEST_DIR}}\output\test_pwd"        -"!:\resource\test\output\test_pwd"
+"${{TEST_DIR}}\output\test_pyexpat"        -"!:\resource\test\output\test_pyexpat"
+"${{TEST_DIR}}\output\test_re"        -"!:\resource\test\output\test_re"
+"${{TEST_DIR}}\output\test_regex"        -"!:\resource\test\output\test_regex"
+"${{TEST_DIR}}\output\test_rgbimg"        -"!:\resource\test\output\test_rgbimg"
+"${{TEST_DIR}}\output\test_richcmp"        -"!:\resource\test\output\test_richcmp"
+"${{TEST_DIR}}\output\test_rotor"        -"!:\resource\test\output\test_rotor"
+"${{TEST_DIR}}\output\test_sax"        -"!:\resource\test\output\test_sax"
+"${{TEST_DIR}}\output\test_scope"        -"!:\resource\test\output\test_scope"
+"${{TEST_DIR}}\output\test_signal"        -"!:\resource\test\output\test_signal"
+"${{TEST_DIR}}\output\test_socket"        -"!:\resource\test\output\test_socket"
+"${{TEST_DIR}}\output\test_string"        -"!:\resource\test\output\test_string"
+"${{TEST_DIR}}\output\test_thread"        -"!:\resource\test\output\test_thread"
+"${{TEST_DIR}}\output\test_threadedtempfile"        -"!:\resource\test\output\test_threadedtempfile"
+"${{TEST_DIR}}\output\test_tokenize"        -"!:\resource\test\output\test_tokenize"
+"${{TEST_DIR}}\output\test_types"        -"!:\resource\test\output\test_types"
+"${{TEST_DIR}}\output\test_ucn"        -"!:\resource\test\output\test_ucn"
+"${{TEST_DIR}}\output\test_unicode"        -"!:\resource\test\output\test_unicode"
+"${{TEST_DIR}}\output\test_unicodedata"        -"!:\resource\test\output\test_unicodedata"
+"${{TEST_DIR}}\output\test_unicode_file"        -"!:\resource\test\output\test_unicode_file"
+"${{TEST_DIR}}\output\test_urlparse"        -"!:\resource\test\output\test_urlparse"
+"${{TEST_DIR}}\output\test_winreg"        -"!:\resource\test\output\test_winreg"
+"${{TEST_DIR}}\output\test_winsound"        -"!:\resource\test\output\test_winsound"
+"${{TEST_DIR}}\output\test_xreadline"        -"!:\resource\test\output\test_xreadline"
+"${{TEST_DIR}}\output\test_zlib"        -"!:\resource\test\output\test_zlib"
+}}
+
+
+
+
+
