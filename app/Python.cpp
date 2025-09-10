@@ -29,7 +29,7 @@
 
 IMPORT_C CEikAppUi* CreateAmarettoAppUi(TInt);
 
-const TUid KUidPythonApp = {0xF0201515};
+static TUid KUidPythonApp = KNullUid;
 
 CPythonDocument::CPythonDocument(CEikApplication& aApp) : CAknDocument(aApp) 
 {
@@ -61,6 +61,7 @@ EXPORT_C CApaApplication* NewApplication()
 #ifdef EKA2
 GLDEF_C TInt E32Main()
 	{
+	KUidPythonApp.iUid = RProcess().SecureId();
 	return EikStart::RunApplication(NewApplication);
 	}
 #endif /*EKA2*/
