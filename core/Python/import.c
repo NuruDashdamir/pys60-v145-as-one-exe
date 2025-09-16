@@ -109,8 +109,176 @@ static const unsigned char M___hello__[] = {
 
 #define SIZE (int)sizeof(M___hello__)
 
+#include "..\\Symbian\\frz\\M_anydbm.c"
+#include "..\\Symbian\\frz\\M_appuifw.c"
+#include "..\\Symbian\\frz\\M_atexit.c"
+#include "..\\Symbian\\frz\\M_audio.c"
+#include "..\\Symbian\\frz\\M_base64.c"
+#include "..\\Symbian\\frz\\M_btconsole.c"
+#include "..\\Symbian\\frz\\M_calendar.c"
+#include "..\\Symbian\\frz\\M_camera.c"
+#include "..\\Symbian\\frz\\M_code.c"
+#include "..\\Symbian\\frz\\M_codecs.c"
+#include "..\\Symbian\\frz\\M_codeop.c"
+#include "..\\Symbian\\frz\\M_contacts.c"
+#include "..\\Symbian\\frz\\M_copy.c"
+#include "..\\Symbian\\frz\\M_copy_reg.c"
+#include "..\\Symbian\\frz\\M_e32dbm.c"
+#include "..\\Symbian\\frz\\M_getpass.c"
+//#include "..\\Symbian\\frz\\M_gles_utils.c"
+#include "..\\Symbian\\frz\\M_graphics.c"
+//#include "..\\Symbian\\frz\\M_httplib.c"
+#include "..\\Symbian\\frz\\M_keycapture.c"
+#include "..\\Symbian\\frz\\M_keyword.c"
+#include "..\\Symbian\\frz\\M_key_codes.c"
+#include "..\\Symbian\\frz\\M_linecache.c"
+//#include "..\\Symbian\\frz\\M_location.c"
+//#include "..\\Symbian\\frz\\M_locationacq.c"
+#include "..\\Symbian\\frz\\M_logs.c"
+#include "..\\Symbian\\frz\\M_messaging.c"
+#include "..\\Symbian\\frz\\M_mimetools.c"
+#include "..\\Symbian\\frz\\M_ntpath.c"
+#include "..\\Symbian\\frz\\M_os.c"
+#include "..\\Symbian\\frz\\M_pack.c"
+//#include "..\\Symbian\\frz\\M_positioning.c"
+#include "..\\Symbian\\frz\\M_quopri.c"
+#include "..\\Symbian\\frz\\M_random.c"
+#include "..\\Symbian\\frz\\M_re.c"
+#include "..\\Symbian\\frz\\M_repr.c"
+#include "..\\Symbian\\frz\\M_rfc822.c"
+#include "..\\Symbian\\frz\\M_select.c"
+#include "..\\Symbian\\frz\\M_sensor.c"
+#include "..\\Symbian\\frz\\M_shutil.c"
+#include "..\\Symbian\\frz\\M_site.c"
+#include "..\\Symbian\\frz\\M_socket.c"
+#include "..\\Symbian\\frz\\M_sre.c"
+#include "..\\Symbian\\frz\\M_sre_compile.c"
+#include "..\\Symbian\\frz\\M_sre_constants.c"
+#include "..\\Symbian\\frz\\M_sre_parse.c"
+#include "..\\Symbian\\frz\\M_stat.c"
+#include "..\\Symbian\\frz\\M_string.c"
+#include "..\\Symbian\\frz\\M_StringIO.c"
+#include "..\\Symbian\\frz\\M_sysinfo.c"
+#include "..\\Symbian\\frz\\M_telephone.c"
+#include "..\\Symbian\\frz\\M_topwindow.c"
+#include "..\\Symbian\\frz\\M_traceback.c"
+#include "..\\Symbian\\frz\\M_types.c"
+//#include "..\\Symbian\\frz\\M_urllib.c"
+#include "..\\Symbian\\frz\\M_urlparse.c"
+#include "..\\Symbian\\frz\\M_UserDict.c"
+#include "..\\Symbian\\frz\\M_uu.c"
+#include "..\\Symbian\\frz\\M_warnings.c"
+#include "..\\Symbian\\frz\\M_weakref.c"
+#include "..\\Symbian\\frz\\M_whichdb.c"
+#include "..\\Symbian\\frz\\M_whrandom.c"
+#include "..\\Symbian\\frz\\M_zipfile.c"
+#include "..\\Symbian\\frz\\M___future__.c"
+
+
+#include "..\\Symbian\\frz\\enc\\M_encodings.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__aliases.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__ascii.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__base64_codec.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__charmap.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__hex_codec.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__latin_1.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__raw_unicode_escape.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__unicode_escape.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__unicode_internal.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__utf_16.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__utf_16_be.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__utf_16_le.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__utf_7.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__utf_8.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__uu_codec.c"
+#include "..\\Symbian\\frz\\enc\\M_encodings__zlib_codec.c"
+
 // XXX:CW32 
 static const struct _frozen _PyImport_FrozenModules[] = {
+	{"anydbm", (unsigned char *) M_anydbm, (int)sizeof(M_anydbm)},
+	{"appuifw", (unsigned char *) M_appuifw, (int)sizeof(M_appuifw)},
+	{"atexit", (unsigned char *) M_atexit, (int)sizeof(M_atexit)},
+	{"audio", (unsigned char *) M_audio, (int)sizeof(M_audio)},
+	{"base64", (unsigned char *) M_base64, (int)sizeof(M_base64)},
+	{"btconsole", (unsigned char *) M_btconsole, (int)sizeof(M_btconsole)},
+	{"calendar", (unsigned char *) M_calendar, (int)sizeof(M_calendar)},
+	{"camera", (unsigned char *) M_camera, (int)sizeof(M_camera)},
+	{"code", (unsigned char *) M_code, (int)sizeof(M_code)},
+	{"codecs", (unsigned char *) M_codecs, (int)sizeof(M_codecs)},
+	{"codeop", (unsigned char *) M_codeop, (int)sizeof(M_codeop)},
+	{"contacts", (unsigned char *) M_contacts, (int)sizeof(M_contacts)},
+	{"copy", (unsigned char *) M_copy, (int)sizeof(M_copy)},
+	{"copy_reg", (unsigned char *) M_copy_reg, (int)sizeof(M_copy_reg)},
+	{"e32dbm", (unsigned char *) M_e32dbm, (int)sizeof(M_e32dbm)},
+	{"getpass", (unsigned char *) M_getpass, (int)sizeof(M_getpass)},
+	{"graphics", (unsigned char *) M_graphics, (int)sizeof(M_graphics)},
+	{"keycapture", (unsigned char *) M_keycapture, (int)sizeof(M_keycapture)},
+	{"keyword", (unsigned char *) M_keyword, (int)sizeof(M_keyword)},
+	{"key_codes", (unsigned char *) M_key_codes, (int)sizeof(M_key_codes)},
+	{"linecache", (unsigned char *) M_linecache, (int)sizeof(M_linecache)},
+	{"logs", (unsigned char *) M_logs, (int)sizeof(M_logs)},
+	{"messaging", (unsigned char *) M_messaging, (int)sizeof(M_messaging)},
+	{"mimetools", (unsigned char *) M_mimetools, (int)sizeof(M_mimetools)},
+	{"ntpath", (unsigned char *) M_ntpath, (int)sizeof(M_ntpath)},
+	{"os", (unsigned char *) M_os, (int)sizeof(M_os)},
+	{"pack", (unsigned char *) M_pack, (int)sizeof(M_pack)},
+	{"quopri", (unsigned char *) M_quopri, (int)sizeof(M_quopri)},
+	{"random", (unsigned char *) M_random, (int)sizeof(M_random)},
+	{"re", (unsigned char *) M_re, (int)sizeof(M_re)},
+	{"repr", (unsigned char *) M_repr, (int)sizeof(M_repr)},
+	{"rfc822", (unsigned char *) M_rfc822, (int)sizeof(M_rfc822)},
+	{"select", (unsigned char *) M_select, (int)sizeof(M_select)},
+	{"sensor", (unsigned char *) M_sensor, (int)sizeof(M_sensor)},
+	{"shutil", (unsigned char *) M_shutil, (int)sizeof(M_shutil)},
+	{"site", (unsigned char *) M_site, (int)sizeof(M_site)},
+	{"socket", (unsigned char *) M_socket, (int)sizeof(M_socket)},
+	{"sre", (unsigned char *) M_sre, (int)sizeof(M_sre)},
+	{"sre_compile", (unsigned char *) M_sre_compile, (int)sizeof(M_sre_compile)},
+	{"sre_constants", (unsigned char *) M_sre_constants, (int)sizeof(M_sre_constants)},
+	{"sre_parse", (unsigned char *) M_sre_parse, (int)sizeof(M_sre_parse)},
+	{"stat", (unsigned char *) M_stat, (int)sizeof(M_stat)},
+	{"string", (unsigned char *) M_string, (int)sizeof(M_string)},
+	{"StringIO", (unsigned char *) M_StringIO, (int)sizeof(M_StringIO)},
+	{"sysinfo", (unsigned char *) M_sysinfo, (int)sizeof(M_sysinfo)},
+	{"telephone", (unsigned char *) M_telephone, (int)sizeof(M_telephone)},
+	{"topwindow", (unsigned char *) M_topwindow, (int)sizeof(M_topwindow)},
+	{"traceback", (unsigned char *) M_traceback, (int)sizeof(M_traceback)},
+	{"types", (unsigned char *) M_types, (int)sizeof(M_types)},
+	{"urlparse", (unsigned char *) M_urlparse, (int)sizeof(M_urlparse)},
+	{"UserDict", (unsigned char *) M_UserDict, (int)sizeof(M_UserDict)},
+	{"uu", (unsigned char *) M_uu, (int)sizeof(M_uu)},
+	{"warnings", (unsigned char *) M_warnings, (int)sizeof(M_warnings)},
+	{"weakref", (unsigned char *) M_weakref, (int)sizeof(M_weakref)},
+	{"whichdb", (unsigned char *) M_whichdb, (int)sizeof(M_whichdb)},
+	{"whrandom", (unsigned char *) M_whrandom, (int)sizeof(M_whrandom)},
+	{"zipfile", (unsigned char *) M_zipfile, (int)sizeof(M_zipfile)},
+	{"__future__", (unsigned char *) M___future__, (int)sizeof(M___future__)},
+
+	//{"gles_utils", (unsigned char *) M_gles_utils, (int)sizeof(M_gles_utils)},
+	//{"httplib", (unsigned char *) M_httplib, (int)sizeof(M_httplib)},
+	//{"location", (unsigned char *) M_location, (int)sizeof(M_location)},
+	//{"locationacq", (unsigned char *) M_locationacq, (int)sizeof(M_locationacq)},
+	//{"positioning", (unsigned char *) M_positioning, (int)sizeof(M_positioning)},
+	//{"urllib", (unsigned char *) M_urllib, (int)sizeof(M_urllib)},
+			
+	{"encodings", (unsigned char *)M_encodings, -(int)sizeof(M_encodings)},
+	{"encodings.aliases", (unsigned char *) M_encodings__aliases, (int)sizeof(M_encodings__aliases)},
+	{"encodings.ascii", (unsigned char *) M_encodings__ascii, (int)sizeof(M_encodings__ascii)},
+	{"encodings.base64_codec", (unsigned char *) M_encodings__base64_codec, (int)sizeof(M_encodings__base64_codec)},
+	{"encodings.charmap", (unsigned char *) M_encodings__charmap, (int)sizeof(M_encodings__charmap)},
+	{"encodings.hex_codec", (unsigned char *) M_encodings__hex_codec, (int)sizeof(M_encodings__hex_codec)},
+	{"encodings.latin_1", (unsigned char *) M_encodings__latin_1, (int)sizeof(M_encodings__latin_1)},
+	{"encodings.raw_unicode_escape", (unsigned char *) M_encodings__raw_unicode_escape, (int)sizeof(M_encodings__raw_unicode_escape)},
+	{"encodings.unicode_escape", (unsigned char *) M_encodings__unicode_escape, (int)sizeof(M_encodings__unicode_escape)},
+	{"encodings.unicode_internal", (unsigned char *) M_encodings__unicode_internal, (int)sizeof(M_encodings__unicode_internal)},
+	{"encodings.utf_16", (unsigned char *) M_encodings__utf_16, (int)sizeof(M_encodings__utf_16)},
+	{"encodings.utf_16_be", (unsigned char *) M_encodings__utf_16_be, (int)sizeof(M_encodings__utf_16_be)},
+	{"encodings.utf_16_le", (unsigned char *) M_encodings__utf_16_le, (int)sizeof(M_encodings__utf_16_le)},
+	{"encodings.utf_7", (unsigned char *) M_encodings__utf_7, (int)sizeof(M_encodings__utf_7)},
+	{"encodings.utf_8", (unsigned char *) M_encodings__utf_8, (int)sizeof(M_encodings__utf_8)},
+	{"encodings.uu_codec", (unsigned char *) M_encodings__uu_codec, (int)sizeof(M_encodings__uu_codec)},
+	{"encodings.zlib_codec", (unsigned char *) M_encodings__zlib_codec, (int)sizeof(M_encodings__zlib_codec)},
+
 	/* Test module */
 	{"__hello__", (unsigned char *)M___hello__, SIZE},
 	/* Test package (negative size indicates package-ness) */
