@@ -299,9 +299,17 @@ SPy_S60app_New()
     return NULL;
   }
   
+  // use appuifwmodule.rsc provided by app itself, no dependency on python (and no clash)
+  TFileName resourcePath;
+  TUid appUid = RProcess().SecureId();
+  // should be something like "c:\\resource\\apps\\appuifw_0xbada1234.rsc"
+  // dont forget to bundle the file!
+  _LIT(KAppRscFilePattern, "\\resource\\apps\\appuifw_0x%08x.rsc");
+  resourcePath.Format(KAppRscFilePattern, appUid.iUid);
+  
   TParse f;
   TFileName fn = op->ob_data->appui->Application()->AppFullName();
-  f.Set(KAppuiFwRscFile, &fn, NULL);
+  f.Set(resourcePath, &fn, NULL); // f.Set(KAppuiFwRscFile, &fn, NULL);
   TRAP(error,
        (op->ob_data->rsc_offset = env->AddResourceFileL(f.FullName())));
 
