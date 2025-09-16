@@ -37,11 +37,14 @@
 
 const TInt KHeapSize = 16000000;
 
+//NTD - won't be required for static deployment
+/*
 #ifdef EKA2
 _LIT8(KLibPath, "c:\\resource\0");
 #else
 _LIT(KLibPath, "\\system\\libs");
-#endif /*EKA2*/
+#endif
+*/
 
 static CSPyInterpreter* GetPythonInterpreter()
 {
@@ -78,6 +81,8 @@ extern "C" int PyOS_InterruptOccurred()
 
 extern "C" char* SPy_get_path()
 {
+  return ""; //NTD - we dont want users to load modules from resource
+/*
 #ifndef EKA2
   RFs r;
   // Memory gets freed when the pool is destroyed
@@ -103,6 +108,7 @@ extern "C" char* SPy_get_path()
 #else
   return (char*)TPtrC8(KLibPath).Ptr();
 #endif
+*/
 }
 
 //
