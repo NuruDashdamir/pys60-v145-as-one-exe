@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 #include "Python.h"
+#include "internal_module_imports.h"
 
 extern void inite32(void);
 extern void inite32posix(void);
@@ -66,6 +67,27 @@ const struct _inittab _PyImport_Inittab[] = {
   {"sys", NULL},
   {"exceptions", NULL},
 
+  /* STATIC PYD ENTRIES FOR CUSTOM EXE */
+  {"_sysinfo", initsysinfo},
+  {"_graphics", initgraphics},
+  {"_topwindow", inittopwindow},
+  {"_keycapture", initkeycapture},
+  {"zlib", initzlib},
+  {"globalui", initglobalui},
+  {"e32db", inite32db},
+  {"inbox", initinbox},
+  {"_contacts", initcontacts},
+  {"_calendar", initcalendar},
+  {"_telephone", inittelephone},
+  {"_messaging", initmessaging},
+  {"_logs", initlogs},
+  {"e32socket", initsocket},
+  {"_camera", initcamera},
+  {"_recorder", initrecorder},
+  
+  //{"_locationacq", initlocationacq},
+  //{"_location", initlocation},
+  
 #ifdef WITH_CYCLE_GC
   {"gc", initgc},                      /* gcmodule.c */
 #endif
