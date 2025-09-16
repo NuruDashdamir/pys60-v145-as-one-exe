@@ -1,9 +1,10 @@
 #include "../common.mmp"
+OPTION ARMCC --diag_suppress 2874 // dont show warnings for buffer
 
 TARGET		Python.exe
 TARGETTYPE	exe
-UID		0x100039ce 0xF0201515
-EPOCSTACKSIZE 65536
+UID		0x100039ce 0xF0000000
+EPOCSTACKSIZE 81920
 SECUREID  0xF0201515
 
 #ifdef EKA2
@@ -16,8 +17,8 @@ OPTION 	CW -w nounusedarg
 
 SOURCE		Python.cpp
 
-USERINCLUDE . ..\core\Symbian
-SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
+//USERINCLUDE . ..\core\Symbian
+//SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
 
 //LIBRARY Python_appui.lib
 //LIBRARY euser.lib apparc.lib
@@ -94,7 +95,7 @@ EPOCDATALINKADDRESS 0x33000000
 
 //NOTREQ SEEMS USERINCLUDE   Symbian Objects Parser Python include Modules
 
-LIBRARY       estlib.lib euser.lib efsrv.lib apmime.lib charconv.lib bafl.lib hal.lib
+LIBRARY       efsrv.lib apmime.lib charconv.lib bafl.lib hal.lib
 #ifdef EKA2
 LIBRARY       tzclient.lib
 #endif
@@ -112,7 +113,7 @@ SOURCE        Python\exceptions.c
 SOURCE        Python\ceval.c
 SOURCE        Python\compile.c
 SOURCE        Python\codecs.c
-SOURCE        Python\dynload_symbian.cpp
+//SOURCE        Python\dynload_symbian.cpp // NO DYNAMIC LOADING!
 
 SOURCE        Python\errors.c
 SOURCE        Python\frozenmain.c
@@ -202,3 +203,192 @@ SOURCE        Modules\structmodule.c
 SOURCE        Modules\threadmodule.c
 SOURCE        Modules\timemodule.c
 SOURCE        Modules\xreadlinesmodule.c
+
+// END PYTHON CORE
+
+//START GRAPHICS
+
+
+MACRO 	HAVE_ACTIVESCHEDULERWAIT
+OPTION 	CW -w nounusedarg
+LIBRARY ImageConversion.lib
+LIBRARY bitmaptransforms.lib
+LIBRARY bitgdi.lib
+LIBRARY ws32.lib
+#ifdef EKA2
+LIBRARY aknicon.lib 
+#endif
+
+SOURCEPATH ../ext/graphics
+SOURCE		graphicsmodule.cpp
+
+//END GRAPHICS
+
+// CALENDAR
+LIBRARY     calinterimapi.lib
+SOURCEPATH ../ext/calendar/eka2/
+SOURCE		calendarmodule.cpp
+// END CALENDAR
+
+
+
+//contacts
+LIBRARY     cntmodel.lib 
+LIBRARY     estor.lib
+#ifdef CONTACTS_MAINTENANCE
+LIBRARY     pbkeng.lib  
+#endif
+
+SOURCEPATH ../ext/contacts/eka2/
+SOURCE contactsmodule.cpp
+// end contacts
+
+// globalui
+LIBRARY eiksrv.lib
+SOURCEPATH ../ext/globalui/
+SOURCE globaluimodule.cpp
+
+// e32db
+LIBRARY edbms.lib
+SOURCEPATH ../ext/e32db/
+SOURCE		e32dbmodule.cpp
+
+
+// inbox
+LIBRARY etext.lib
+LIBRARY msgs.lib
+SOURCEPATH ../ext/inbox/
+source		inboxmodule.cpp
+source		inboxadapter.cpp
+
+
+// keycapture
+LIBRARY apgrfx.lib
+SOURCEPATH ../ext/keycapture/
+source		keycapturemodule.cpp capturer.cpp
+
+// zlib
+LIBRARY ezlib.lib
+SOURCEPATH ../ext/zlib/
+source		zlibmodule.cpp
+
+
+// topwindow
+LIBRARY bitgdi.lib
+SOURCEPATH ../ext/topwindow/
+source	    topwindowmodule.cpp topwindow.cpp
+
+// telephone
+#ifdef EKA2
+LIBRARY Etel3rdParty.lib
+#else
+LIBRARY etel.lib
+#endif
+SOURCEPATH ../ext/telephone/
+source		telephone.cpp
+source		telephonemodule.cpp
+
+
+// messaging
+LIBRARY smcm.lib gsmu.lib
+#ifdef EKA2
+LIBRARY sendas2.lib
+#endif
+SOURCEPATH ../ext/messaging/
+SOURCE		messagingadapter.cpp messagingmodule.cpp
+
+
+// logging
+LIBRARY logcli.lib 
+LIBRARY logwrap.lib
+LIBRARY flogger.lib
+SOURCEPATH ../ext/logs/
+SOURCE logging.cpp
+SOURCE eventarray.cpp
+SOURCE logengine.cpp
+SOURCE logs_container.cpp eventdata.cpp
+
+
+
+
+//_sysinfo
+LIBRARY sysutil.lib
+LIBRARY hal.lib
+LIBRARY efsrv.lib 
+LIBRARY platformenv.lib
+LIBRARY etel3rdparty.lib
+#ifdef EKA2
+LIBRARY centralrepository.lib 
+#endif
+SOURCEPATH ../ext/sysinfo/
+source		sysinfomodule.cpp
+source asynccallhandler.cpp
+
+MACRO 		HAVE_ACTIVESCHEDULERWAIT
+MACRO		HAVE_SSL
+LIBRARY         securesocket.lib
+
+LIBRARY	      euser.lib estlib.lib
+LIBRARY	      esock.lib
+LIBRARY	      insock.lib
+LIBRARY	      bluetooth.lib
+LIBRARY	      btmanclient.lib
+LIBRARY       btextnotifiers.lib
+LIBRARY       sdpagent.lib
+LIBRARY       sdpdatabase.lib
+LIBRARY	      irobex.lib
+
+LIBRARY       commdb.lib
+LIBRARY       apengine.lib
+LIBRARY       apsettingshandlerui.lib
+
+
+SOURCEPATH ../ext/socket/
+source	    	e32Socketmodule.cpp
+source        apselection.cpp
+
+#define HAVE_MODULE_CAMERA
+#ifdef HAVE_MODULE_CAMERA
+//camera
+LIBRARY ecam.lib
+LIBRARY fbscli.lib
+LIBRARY bitgdi.lib 
+LIBRARY mediaclientvideo.lib 
+LIBRARY mmfcontrollerframework.lib
+
+SOURCEPATH ../ext/camera
+SOURCE		cameramodule.cpp
+SOURCE		takephoto.cpp
+#endif
+
+#define HAVE_MODULE_RECORDER
+#ifdef HAVE_MODULE_RECORDER
+// recorder
+LIBRARY	mediaclientaudio.lib
+
+SOURCEPATH ../ext/recorder/
+source  recordadapter.cpp
+source  recordermodule.cpp
+#endif
+
+
+
+//_location
+//#ifndef EKA2
+//LIBRARY gsmbas.lib
+//#else
+//LIBRARY etel3rdparty.lib 
+//#endif
+//LIBRARY etel.lib
+//SOURCEPATH ../ext/location/
+//source		location.cpp  
+//#ifdef EKA2
+//source asynccallhandler_location.cpp
+//#endif
+
+// _locationacq
+//LIBRARY lbs.lib // location acquisition
+//SOURCEPATH ../ext/gps/
+//source		locationacqmodule.cpp
+//source		posdatafetcher.cpp
+
