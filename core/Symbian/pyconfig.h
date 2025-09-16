@@ -141,7 +141,7 @@
 #undef HAVE_ALTZONE
 
 /* Defined when any dynamic module loading is enabled */
-#define HAVE_DYNAMIC_LOADING
+#undef HAVE_DYNAMIC_LOADING //NTD - removed dynamic loading as it won't be needed for single EXE version
 
 /* Define this if you have flockfile(), getc_unlocked(), and funlockfile() */
 #undef HAVE_GETC_UNLOCKED

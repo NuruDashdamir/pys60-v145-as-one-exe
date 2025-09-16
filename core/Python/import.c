@@ -140,13 +140,19 @@ _PyImport_Init(void)
 	/* prepare _PyImport_Filetab: copy entries from
 	   _PyImport_DynLoadFiletab and _PyImport_StandardFiletab.
 	 */
+#ifdef HAVE_DYNAMIC_LOADING
 	for (scan = _PyImport_DynLoadFiletab; scan->suffix != NULL; ++scan)
 		++countD;
+#endif
 	for (scan = _PyImport_StandardFiletab; scan->suffix != NULL; ++scan)
 		++countS;
 	filetab = PyMem_NEW(struct filedescr, countD + countS + 1);
+
+#ifdef HAVE_DYNAMIC_LOADING
 	memcpy(filetab, _PyImport_DynLoadFiletab,
 	       countD * sizeof(struct filedescr));
+#endif
+
 	memcpy(filetab + countD, _PyImport_StandardFiletab,
 	       countS * sizeof(struct filedescr));
 	filetab[countD + countS].suffix = NULL;

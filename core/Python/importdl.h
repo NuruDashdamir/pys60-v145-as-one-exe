@@ -27,10 +27,14 @@ struct filedescr {
 	enum filetype type;
 };
 extern struct filedescr * _PyImport_Filetab;
+
+// NTD remove dynamic loading if it is not needed
+#ifdef HAVE_DYNAMIC_LOADING
 extern const struct filedescr _PyImport_DynLoadFiletab[];
 
 extern PyObject *_PyImport_LoadDynamicModule(char *name, char *pathname,
 					     FILE *);
+#endif
 
 /* Max length of module suffix searched for -- accommodates "module.slb" */
 #define MAXSUFFIXSIZE 12
