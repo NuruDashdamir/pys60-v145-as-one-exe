@@ -52,7 +52,7 @@
 #include <e32std.h>
 #include <e32def.h>
 //
-#include "container.h"
+#include "logs_container.h"
 //
 //
 enum TLogTypes {

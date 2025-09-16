@@ -17,8 +17,8 @@
  * ====================================================================
  */
  
-#ifndef __CCONTAINER
-#define __CCONTAINER
+#ifndef __CLOGSCONTAINER
+#define __CLOGSCONTAINER
 
 #include <e32base.h>
 #include <e32std.h>

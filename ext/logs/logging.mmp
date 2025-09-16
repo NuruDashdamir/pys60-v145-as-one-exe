@@ -45,5 +45,5 @@ SOURCEPATH .
 SOURCE logging.cpp
 SOURCE eventarray.cpp
 SOURCE logengine.cpp
-SOURCE container.cpp
+SOURCE logs_container.cpp
 SOURCE eventdata.cpp

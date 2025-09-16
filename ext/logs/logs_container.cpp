@@ -17,7 +17,7 @@
  * ====================================================================
  */
 
-#include "container.h"
+#include "logs_container.h"
 
 //Construction.
 CLogContainer* CLogContainer::NewL(TInt aDirection, TUid aType)
