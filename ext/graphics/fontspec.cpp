@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+#include "Python.h"
+#include "symbian_python_ext_util.h"
 #include <aknutils.h>
 
 /* Font flags. */
@@ -41,7 +43,7 @@
  img.text((20,20),u'Foo',font=(None,15,font.ANTIALIAS)
 */
 
-static int system_font_from_label(const char * aLabel, const CFont *&aFont)
+int system_font_from_label(const char * aLabel, const CFont *&aFont)
 {
     CEikonEnv *env=CEikonEnv::Static();
     if (!env) {
@@ -100,7 +102,7 @@ static int system_font_from_label(const char * aLabel, const CFont *&aFont)
  * 
  * Return: 0 on success, -1 on error (with Python exception set)
  */
-static int TFontSpec_from_python_fontspec(
+int TFontSpec_from_python_fontspec(
     PyObject *aArg,
     TFontSpec &aFontSpec,
     MGraphicsDeviceMap &aDeviceMap)
@@ -235,7 +237,7 @@ static int TFontSpec_from_python_fontspec(
  *
  * Return: 0 on success, -1 on error (with Python exception set)
  */
-static int CFont_from_python_fontspec(
+int CFont_from_python_fontspec(
     PyObject *aArg,
     CFont *&aFont,
     MGraphicsDeviceMap &aDeviceMap)
@@ -251,7 +253,7 @@ static int CFont_from_python_fontspec(
     return 0;
 }
 
-static PyObject * python_fontspec_from_TFontSpec(
+PyObject * python_fontspec_from_TFontSpec(
     const TFontSpec &aFontSpec,
     MGraphicsDeviceMap &aDeviceMap)
 {

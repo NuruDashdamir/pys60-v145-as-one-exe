@@ -106,11 +106,9 @@
 
 #include "appuifwmodule.h"
 #include "appuifw_callbacks.h"
-#include "colorspec.cpp"
-// Yuck. This is ugly but will do for now until a better solution is implemented 
-// for shared functionality between appuifw and graphics modules. Perhaps they
-// should just be merged?
-#include "../../ext/graphics/fontspec.cpp"
+#include "fontspec.h"
+#include "colorspec.h"
+
 
 #if SERIES60_VERSION>=28
 #include "akniconutils.h"

@@ -17,13 +17,6 @@ OPTION 	CW -w nounusedarg
 
 SOURCE		Python.cpp
 
-//USERINCLUDE . ..\core\Symbian
-//SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
-
-//LIBRARY Python_appui.lib
-//LIBRARY euser.lib apparc.lib
-//LIBRARY eikcore.lib avkon.lib
-
 START RESOURCE Python.rss
 HEADER
 TARGETPATH      resource\apps
@@ -221,6 +214,8 @@ LIBRARY aknicon.lib
 
 SOURCEPATH ../ext/graphics
 SOURCE		graphicsmodule.cpp
+USERINCLUDE ../ext/graphics
+SOURCE		colorspec.cpp fontspec.cpp // these now merged between appuifw and graphics
 
 //END GRAPHICS
 

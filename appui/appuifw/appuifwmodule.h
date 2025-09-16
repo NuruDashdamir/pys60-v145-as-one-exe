@@ -80,11 +80,14 @@
 
 _LIT(KSeparatorTab, "\t");
 _LIT(KEmptyString, "");
+/*
+//NTD - removed as loading from resource folder is bad for static deployment
 #ifdef EKA2
 _LIT(KAppuiFwRscFile, "\\resource\\apps\\appuifwmodule.rsc");
 #else
 _LIT(KAppuiFwRscFile, "\\system\\data\\appuifwmodule.rsc");
-#endif /*EKA2*/
+#endif
+*/
 _LIT8(KTextFieldType, "text");
 _LIT(KUcTextFieldType, "text");
 _LIT8(KNumberFieldType, "number");

@@ -60,8 +60,8 @@
 #include <BitmapTransforms.h>
 #endif
 
-#include "colorspec.cpp"
-#include "fontspec.cpp"
+#include "colorspec.h"
+#include "fontspec.h"
 
 //#include <ImageCodecData.h>
 

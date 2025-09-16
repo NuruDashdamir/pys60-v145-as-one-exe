@@ -19,8 +19,11 @@
  * 
  * Return: 1 if successful, 0 if error.
  */
-static int
-ColorSpec_AsRgb(PyObject *color_object, TRgb *rgb)
+ 
+#include "Python.h"
+#include <gdi.h>
+
+int ColorSpec_AsRgb(PyObject *color_object, TRgb *rgb)
 {
   int r,g,b;  
   if (PyTuple_Check(color_object)) {
@@ -43,8 +46,7 @@ ColorSpec_AsRgb(PyObject *color_object, TRgb *rgb)
 }
 
 
-static int 
-ColorSpec_Check(PyObject *color_object)
+int ColorSpec_Check(PyObject *color_object)
 {
   if (PyInt_Check(color_object)) 
     return 1;
@@ -59,8 +61,7 @@ ColorSpec_Check(PyObject *color_object)
   return 0;
 }
 
-static PyObject *
-ColorSpec_FromRgb(TRgb color)
+PyObject * ColorSpec_FromRgb(TRgb color)
 {
   return Py_BuildValue("(iii)", color.Red(), color.Green(), color.Blue());
 }
