@@ -65,7 +65,7 @@ TBool IsContactGroup(CContactItem& item)
  * open(u'filename', 'n') - creates new empty database file.
  */
 extern "C" PyObject *
-open_db(PyObject* /*self*/, PyObject *args)
+open_contactsdb(PyObject* /*self*/, PyObject *args)
 {
   PyObject* filename = NULL;
   char* flag = NULL;
@@ -2110,7 +2110,7 @@ extern "C" {
 
 extern "C" {
   static const PyMethodDef contacts_methods[] = {
-    {"open", (PyCFunction)open_db, METH_VARARGS, NULL},
+    {"open", (PyCFunction)open_contactsdb, METH_VARARGS, NULL},
 #ifdef CONTACTS_MAINTENANCE
     {"_create_api_mappings", (PyCFunction)_create_api_mappings, METH_NOARGS, NULL},
 #endif
