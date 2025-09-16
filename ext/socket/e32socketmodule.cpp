@@ -1403,6 +1403,8 @@ public:
 };
 
 
+static TStaticData* E32SOCKET_DLL_TLS_WORKAROUND = NULL;
+
 extern "C"
 void socket_mod_cleanup();
 
@@ -1415,9 +1417,9 @@ ap_stop(AP_object *self, PyObject* /*args*/);
 
 TStaticData* GetServer()
 {
-  if (Dll::Tls())
+  if (E32SOCKET_DLL_TLS_WORKAROUND) //(Dll::Tls())
   {
-      return static_cast<TStaticData*>(Dll::Tls());
+      return E32SOCKET_DLL_TLS_WORKAROUND; // return static_cast<TStaticData*>(Dll::Tls());
   }
   else 
   {
@@ -1438,15 +1440,19 @@ TStaticData* GetServer()
         delete sd;
         return (TStaticData*) SPyErr_SetFromSymbianOSErr(error);
       }
+	  
+	  E32SOCKET_DLL_TLS_WORKAROUND = sd;
+	  /*
       error = Dll::SetTls(sd);
       if(error!=KErrNone){
         sd->rss.Close();
         delete sd;
         return (TStaticData*) SPyErr_SetFromSymbianOSErr(error);
-      }    
+      }*/
       
+	  
       PyThread_AtExit(socket_mod_cleanup);
-      return static_cast<TStaticData*>(Dll::Tls()); 
+      return E32SOCKET_DLL_TLS_WORKAROUND;// return static_cast<TStaticData*>(Dll::Tls()); 
   }   
 }
 
@@ -1614,8 +1620,8 @@ extern "C" {
         sd->apo = NULL;  
       }
       sd->rss.Close();
-      delete static_cast<TStaticData *>(Dll::Tls());
-      Dll::SetTls(NULL);
+      delete sd; //delete static_cast<TStaticData *>(Dll::Tls());
+      E32SOCKET_DLL_TLS_WORKAROUND = NULL;//Dll::SetTls(NULL);
     }
   }
 }

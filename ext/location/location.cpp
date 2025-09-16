@@ -99,11 +99,13 @@ public:
   CTelephony *telephony;
 };
 
+static TStaticData* LOCATION_DLL_TLS_WORKAROUND = NULL;
+
 TStaticData* GetTelephony()
 {
-  if (Dll::Tls())
+  if (LOCATION_DLL_TLS_WORKAROUND) //(Dll::Tls())
   {
-      return static_cast<TStaticData*>(Dll::Tls());
+      return LOCATION_DLL_TLS_WORKAROUND; // return static_cast<TStaticData*>(Dll::Tls());
   }
   else 
   {
@@ -122,15 +124,16 @@ TStaticData* GetTelephony()
         delete sd;
         return (TStaticData*) SPyErr_SetFromSymbianOSErr(error);
       }
-      error = Dll::SetTls(sd);
+	  LOCATION_DLL_TLS_WORKAROUND = sd;
+      /*error = Dll::SetTls(sd);
       if(error!=KErrNone){
         delete sd->telephony;
         delete sd;
         return (TStaticData*) SPyErr_SetFromSymbianOSErr(error);
-      }    
+      } */   
          
       PyThread_AtExit(location_mod_cleanup);
-      return static_cast<TStaticData*>(Dll::Tls()); 
+      return LOCATION_DLL_TLS_WORKAROUND; // return static_cast<TStaticData*>(Dll::Tls()); 
   }   
 }
 
@@ -142,8 +145,8 @@ extern "C" {
     
     if(sd!=NULL){
       delete sd->telephony;
-      delete static_cast<TStaticData *>(Dll::Tls());
-      Dll::SetTls(NULL);
+      delete sd; //delete static_cast<TStaticData *>(Dll::Tls());
+      LOCATION_DLL_TLS_WORKAROUND = NULL; //Dll::SetTls(NULL);
     }
   }
 }

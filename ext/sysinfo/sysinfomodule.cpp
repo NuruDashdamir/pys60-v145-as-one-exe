@@ -135,11 +135,13 @@ public:
   CTelephony *telephony;
 };
 
+static TStaticData* SYSINFO_DLL_TLS_WORKAROUND = NULL;
+
 TStaticData* GetTelephony()
 {
-  if (Dll::Tls())
+  if (SYSINFO_DLL_TLS_WORKAROUND)
   {
-      return static_cast<TStaticData*>(Dll::Tls());
+      return SYSINFO_DLL_TLS_WORKAROUND;
   }
   else 
   {
@@ -157,15 +159,15 @@ TStaticData* GetTelephony()
         delete sd;
         return (TStaticData*) SPyErr_SetFromSymbianOSErr(error);
       }
-      error = Dll::SetTls(sd);
-      if(error!=KErrNone){
+      SYSINFO_DLL_TLS_WORKAROUND = sd;// error = Dll::SetTls(sd);
+      /* if(error!=KErrNone){
         delete sd->telephony;
         delete sd;
         return (TStaticData*) SPyErr_SetFromSymbianOSErr(error);
-      }    
+      } */  
          
       PyThread_AtExit(sysinfo_mod_cleanup);
-      return static_cast<TStaticData*>(Dll::Tls()); 
+      return SYSINFO_DLL_TLS_WORKAROUND; // return static_cast<TStaticData*>(Dll::Tls()); 
   }   
 }
 #else
@@ -217,7 +219,7 @@ extern "C" {
     if(sd!=NULL){
       delete sd->telephony;
       delete sd;
-      Dll::SetTls(NULL);
+      SYSINFO_DLL_TLS_WORKAROUND = NULL; //Dll::SetTls(NULL);
     }
 #else
     TStaticData* sd = GetSystemAgent();
