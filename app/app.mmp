@@ -1,113 +1,94 @@
 #include "../common.mmp"
-OPTION ARMCC --diag_suppress 2874 // dont show warnings for buffer
 
-TARGET		Python.exe
-TARGETTYPE	exe
-UID		0x100039ce 0xF0000000
+#define HAVE_MODULE_SYSINFO
+#define HAVE_MODULE_GRAPHICS
+#define HAVE_MODULE_TOPWINDOW
+#define HAVE_MODULE_GLOBALUI
+#define HAVE_MODULE_KEYCAPTURE
+#define HAVE_MODULE_ZLIB
+#define HAVE_MODULE_E32DB
+#define HAVE_MODULE_CALENDAR
+#define HAVE_MODULE_CONTACTS
+#define HAVE_MODULE_INBOX
+#define HAVE_MODULE_TELEPHONE
+#define HAVE_MODULE_MESSAGING
+#define HAVE_MODULE_LOGS
+#define HAVE_MODULE_E32SOCKET
+#define HAVE_MODULE_CAMERA
+#define HAVE_MODULE_RECORDER
+
+OPTION CW -w nounusedarg
+OPTION ARMCC --diag_suppress 2874                     /* dont show warnings for buffer */
+OPTION ARMCC --diag_warning 145                       /* Downgrade initialized data error, #145, for RVCT - XXX does not work */
+OPTION ARMCC -O3 -Otime --memaccess -UL41 --cpu 5T    /* ALWAYS_BUILD_AS_ARM - Generic optimizations */
+
+TARGET        Python.exe
+TARGETTYPE    exe
+UID           0x100039ce 0xF0000000
 EPOCSTACKSIZE 81920
-SECUREID  0xF0201515
+SECUREID      0xF0201515
 
-#ifdef EKA2
-CAPABILITY NetworkServices LocalServices ReadUserData WriteUserData Location UserEnvironment PowerMgmt ProtServ SwEvent SurroundingsDD ReadDeviceData WriteDeviceData TrustedUI
-#endif
+VENDORID      0
+CAPABILITY    NetworkServices LocalServices ReadUserData WriteUserData Location UserEnvironment PowerMgmt ProtServ SwEvent SurroundingsDD ReadDeviceData WriteDeviceData TrustedUI
 
-//NOSTRICTDEF
-//DEFFILE		Python_app.frz
-OPTION 	CW -w nounusedarg
-
-SOURCE		Python.cpp
+SOURCE        Python.cpp
 
 START RESOURCE Python.rss
 HEADER
-TARGETPATH      resource\apps
-//LANG  SC //only needed for localized application
+TARGETPATH     resource\apps
 END
 
 START RESOURCE Python_reg.rss
-TARGETPATH \private\10003a3f\apps
+TARGETPATH     \private\10003a3f\apps
 END
 
+SYSTEMINCLUDE  \epoc32\include \epoc32\include\libc
 
-#ifdef EKA2
-VENDORID	  	  0
-#endif /*EKA2*/
+USERINCLUDE   ..\appui
+USERINCLUDE   ..\appui\appuifw
+USERINCLUDE   ..\ext\graphics    /* for the new header files */
+USERINCLUDE   ..\core\Include
+USERINCLUDE   ..\core\Symbian
+USERINCLUDE   ..\core\Objects
+USERINCLUDE   ..\core\Parser
+USERINCLUDE   ..\core\Python
+USERINCLUDE   ..\core\Modules
 
+LIBRARY       apparc.lib euser.lib estlib.lib cone.lib eikcore.lib eikcoctl.lib
+LIBRARY       eikctl.lib eikdlg.lib avkon.lib bafl.lib efsrv.lib commonui.lib
+LIBRARY       apmime.lib charconv.lib estor.lib etext.lib gdi.lib fbscli.lib
+LIBRARY       form.lib aknnotify.lib fntstr.lib aknicon.lib egul.lib uiklaf.lib 
+LIBRARY       hal.lib tzclient.lib
 
-
-
-//APPUIFW START
-
-USERINCLUDE 	..\appui ..\appui\appuifw
-USERINCLUDE     ..\core\Include ..\core\Symbian
-USERINCLUDE     ..\core\Objects ..\core\Parser
-USERINCLUDE     ..\core\Python ..\core\Modules
-
-SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
-
-//LIBRARY python222.lib
-LIBRARY  apparc.lib
-LIBRARY         euser.lib estlib.lib
-LIBRARY         cone.lib eikcore.lib eikcoctl.lib eikctl.lib eikdlg.lib
-LIBRARY         avkon.lib bafl.lib efsrv.lib commonui.lib apmime.lib charconv.lib
-LIBRARY         estor.lib etext.lib gdi.lib fbscli.lib form.lib
-LIBRARY         aknnotify.lib fntstr.lib
-LIBRARY aknicon.lib egul.lib
-
-LIBRARY uiklaf.lib 
-
-SOURCEPATH ..\appui
-SOURCE		Python_appui.cpp Container.cpp
-SOURCE          appuifw\appuifwmodule.cpp  appuifw\CAppuifwEventBindingArray.cpp
-
-//APPUIFW END
-
-
-// PYTHON222 START
+SOURCEPATH    ..\appui
+SOURCE        Python_appui.cpp Container.cpp
+SOURCE        appuifw\appuifwmodule.cpp  appuifw\CAppuifwEventBindingArray.cpp
 
 MACRO         HAVE_ACTIVESCHEDULERWAIT
 MACRO         HAVE_HUGE_VAL
-OPTION        CW -w nounusedarg
-
-
-/* Downgrade initialized data error, #145, for RVCT */
-/* XXX does not work */
-  OPTION        ARMCC --diag_warning 145
-  
-/* ALWAYS_BUILD_AS_ARM */ 
-/* Generic optimizations */
-OPTION ARMCC -O3 -Otime --memaccess -UL41 --cpu 5T
-
 #ifndef WINS
-MACRO 	USE_GLOBAL_DATA_HACK
-//EPOCALLOWDLLDATA
-#ifndef EKA2
-EPOCDATALINKADDRESS 0x33000000
-#endif
+MACRO         USE_GLOBAL_DATA_HACK
 #endif 
 
 
-//NOTREQ SEEMS USERINCLUDE   Symbian Objects Parser Python include Modules
+SOURCEPATH    ..\core
 
-LIBRARY       efsrv.lib apmime.lib charconv.lib bafl.lib hal.lib
-#ifdef EKA2
-LIBRARY       tzclient.lib
-#endif
-
-SOURCEPATH ..\core
-SOURCE        Symbian\CSPyInterpreter.cpp Symbian\config.c Symbian\python_globals.cpp
-SOURCE        Symbian\symbian_python_ext_util.cpp Symbian\e32module.cpp
+SOURCE        Symbian\CSPyInterpreter.cpp
+SOURCE        Symbian\config.c
+SOURCE        Symbian\python_globals.cpp
+SOURCE        Symbian\symbian_python_ext_util.cpp
+SOURCE        Symbian\e32module.cpp
 #ifdef WITH_DLC
 SOURCE        Symbian\dlc.cpp
 #endif
 
+//SOURCE        Python\dynload_symbian.cpp /* NO DYNAMIC LOADING! */
 
 SOURCE        Python\bltinmodule.c
 SOURCE        Python\exceptions.c
 SOURCE        Python\ceval.c
 SOURCE        Python\compile.c
 SOURCE        Python\codecs.c
-//SOURCE        Python\dynload_symbian.cpp // NO DYNAMIC LOADING!
-
 SOURCE        Python\errors.c
 SOURCE        Python\frozenmain.c
 SOURCE        Python\future.c
@@ -197,173 +178,174 @@ SOURCE        Modules\threadmodule.c
 SOURCE        Modules\timemodule.c
 SOURCE        Modules\xreadlinesmodule.c
 
-// END PYTHON CORE
 
-//START GRAPHICS
-
-
-MACRO 	HAVE_ACTIVESCHEDULERWAIT
-OPTION 	CW -w nounusedarg
-LIBRARY ImageConversion.lib
-LIBRARY bitmaptransforms.lib
-LIBRARY bitgdi.lib
-LIBRARY ws32.lib
-#ifdef EKA2
-LIBRARY aknicon.lib 
+#ifdef HAVE_MODULE_SYSINFO
+MACRO  HAVE_MODULE_SYSINFO
+LIBRARY       sysutil.lib
+LIBRARY       platformenv.lib
+LIBRARY       etel3rdparty.lib
+LIBRARY       centralrepository.lib
+SOURCEPATH    ../ext/sysinfo/
+SOURCE        sysinfomodule.cpp
+SOURCE        asynccallhandler.cpp
 #endif
 
-SOURCEPATH ../ext/graphics
-SOURCE		graphicsmodule.cpp
-USERINCLUDE ../ext/graphics
-SOURCE		colorspec.cpp fontspec.cpp // these now merged between appuifw and graphics
 
-//END GRAPHICS
-
-// CALENDAR
-LIBRARY     calinterimapi.lib
-SOURCEPATH ../ext/calendar/eka2/
-SOURCE		calendarmodule.cpp
-// END CALENDAR
-
+#ifdef HAVE_MODULE_GRAPHICS
+MACRO  HAVE_MODULE_GRAPHICS
+LIBRARY       ImageConversion.lib
+LIBRARY       bitmaptransforms.lib
+LIBRARY       bitgdi.lib
+LIBRARY       ws32.lib
+SOURCEPATH    ../ext/graphics
+SOURCE        graphicsmodule.cpp
+SOURCE        colorspec.cpp fontspec.cpp // these now merged between appuifw and graphics
+#endif
 
 
-//contacts
-LIBRARY     cntmodel.lib 
-LIBRARY     estor.lib
+#ifdef HAVE_MODULE_TOPWINDOW
+MACRO  HAVE_MODULE_TOPWINDOW
+SOURCEPATH    ../ext/topwindow/
+SOURCE        topwindowmodule.cpp topwindow.cpp
+#endif
+
+
+#ifdef HAVE_MODULE_GLOBALUI
+MACRO  HAVE_MODULE_GLOBALUI
+LIBRARY       eiksrv.lib
+SOURCEPATH    ../ext/globalui/
+SOURCE        globaluimodule.cpp
+#endif
+
+
+#ifdef HAVE_MODULE_KEYCAPTURE
+MACRO  HAVE_MODULE_KEYCAPTURE
+LIBRARY       apgrfx.lib
+SOURCEPATH    ../ext/keycapture/
+SOURCE        keycapturemodule.cpp capturer.cpp
+#endif
+
+
+#ifdef HAVE_MODULE_ZLIB
+MACRO  HAVE_MODULE_ZLIB
+LIBRARY       ezlib.lib
+SOURCEPATH    ../ext/zlib/
+SOURCE        zlibmodule.cpp
+#endif
+
+
+#ifdef HAVE_MODULE_E32DB
+MACRO  HAVE_MODULE_E32DB
+LIBRARY       edbms.lib
+SOURCEPATH    ../ext/e32db/
+SOURCE        e32dbmodule.cpp
+#endif
+
+
+#ifdef HAVE_MODULE_CALENDAR
+MACRO  HAVE_MODULE_CALENDAR
+LIBRARY       calinterimapi.lib
+SOURCEPATH    ../ext/calendar/eka2/
+SOURCE        calendarmodule.cpp
+#endif
+
+
+#ifdef HAVE_MODULE_CONTACTS
+MACRO  HAVE_MODULE_CONTACTS
 #ifdef CONTACTS_MAINTENANCE
-LIBRARY     pbkeng.lib  
+LIBRARY       pbkeng.lib  
+#endif
+LIBRARY       cntmodel.lib
+SOURCEPATH    ../ext/contacts/eka2/
+SOURCE        contactsmodule.cpp
 #endif
 
-SOURCEPATH ../ext/contacts/eka2/
-SOURCE contactsmodule.cpp
-// end contacts
 
-// globalui
-LIBRARY eiksrv.lib
-SOURCEPATH ../ext/globalui/
-SOURCE globaluimodule.cpp
-
-// e32db
-LIBRARY edbms.lib
-SOURCEPATH ../ext/e32db/
-SOURCE		e32dbmodule.cpp
+#ifdef HAVE_MODULE_INBOX
+MACRO  HAVE_MODULE_INBOX
+LIBRARY       msgs.lib
+SOURCEPATH    ../ext/inbox/
+SOURCE        inboxmodule.cpp
+SOURCE        inboxadapter.cpp
+#endif
 
 
-// inbox
-LIBRARY etext.lib
-LIBRARY msgs.lib
-SOURCEPATH ../ext/inbox/
-source		inboxmodule.cpp
-source		inboxadapter.cpp
-
-
-// keycapture
-LIBRARY apgrfx.lib
-SOURCEPATH ../ext/keycapture/
-source		keycapturemodule.cpp capturer.cpp
-
-// zlib
-LIBRARY ezlib.lib
-SOURCEPATH ../ext/zlib/
-source		zlibmodule.cpp
-
-
-// topwindow
-LIBRARY bitgdi.lib
-SOURCEPATH ../ext/topwindow/
-source	    topwindowmodule.cpp topwindow.cpp
-
-// telephone
+#ifdef HAVE_MODULE_TELEPHONE
+MACRO  HAVE_MODULE_TELEPHONE
 #ifdef EKA2
-LIBRARY Etel3rdParty.lib
+LIBRARY       Etel3rdParty.lib
 #else
-LIBRARY etel.lib
+LIBRARY       etel.lib
 #endif
-SOURCEPATH ../ext/telephone/
-source		telephone.cpp
-source		telephonemodule.cpp
+SOURCEPATH    ../ext/telephone/
+SOURCE        telephone.cpp
+SOURCE        telephonemodule.cpp
+#endif
 
 
-// messaging
-LIBRARY smcm.lib gsmu.lib
+#ifdef HAVE_MODULE_MESSAGING
+MACRO  HAVE_MODULE_MESSAGING
+LIBRARY       smcm.lib gsmu.lib
 #ifdef EKA2
-LIBRARY sendas2.lib
+LIBRARY       sendas2.lib
 #endif
-SOURCEPATH ../ext/messaging/
-SOURCE		messagingadapter.cpp messagingmodule.cpp
-
-
-// logging
-LIBRARY logcli.lib 
-LIBRARY logwrap.lib
-LIBRARY flogger.lib
-SOURCEPATH ../ext/logs/
-SOURCE logging.cpp
-SOURCE eventarray.cpp
-SOURCE logengine.cpp
-SOURCE logs_container.cpp eventdata.cpp
-
-
-
-
-//_sysinfo
-LIBRARY sysutil.lib
-LIBRARY hal.lib
-LIBRARY efsrv.lib 
-LIBRARY platformenv.lib
-LIBRARY etel3rdparty.lib
-#ifdef EKA2
-LIBRARY centralrepository.lib 
+SOURCEPATH    ../ext/messaging/
+SOURCE        messagingadapter.cpp messagingmodule.cpp
 #endif
-SOURCEPATH ../ext/sysinfo/
-source		sysinfomodule.cpp
-source asynccallhandler.cpp
 
-MACRO 		HAVE_ACTIVESCHEDULERWAIT
-MACRO		HAVE_SSL
-LIBRARY         securesocket.lib
 
-LIBRARY	      euser.lib estlib.lib
-LIBRARY	      esock.lib
-LIBRARY	      insock.lib
-LIBRARY	      bluetooth.lib
-LIBRARY	      btmanclient.lib
+#ifdef HAVE_MODULE_LOGS
+MACRO  HAVE_MODULE_LOGS
+LIBRARY       logcli.lib 
+LIBRARY       logwrap.lib
+LIBRARY       flogger.lib
+SOURCEPATH    ../ext/logs/
+SOURCE        logging.cpp
+SOURCE        eventarray.cpp
+SOURCE        logengine.cpp
+SOURCE        logs_container.cpp eventdata.cpp
+#endif
+
+
+#ifdef HAVE_MODULE_E32SOCKET
+MACRO  HAVE_MODULE_E32SOCKET
+MACRO         HAVE_SSL
+LIBRARY       securesocket.lib
+
+LIBRARY       esock.lib
+LIBRARY       insock.lib
+LIBRARY       bluetooth.lib
+LIBRARY       btmanclient.lib
 LIBRARY       btextnotifiers.lib
 LIBRARY       sdpagent.lib
 LIBRARY       sdpdatabase.lib
-LIBRARY	      irobex.lib
-
+LIBRARY       irobex.lib
 LIBRARY       commdb.lib
 LIBRARY       apengine.lib
 LIBRARY       apsettingshandlerui.lib
-
-
-SOURCEPATH ../ext/socket/
-source	    	e32Socketmodule.cpp
-source        apselection.cpp
-
-#define HAVE_MODULE_CAMERA
-#ifdef HAVE_MODULE_CAMERA
-//camera
-LIBRARY ecam.lib
-LIBRARY fbscli.lib
-LIBRARY bitgdi.lib 
-LIBRARY mediaclientvideo.lib 
-LIBRARY mmfcontrollerframework.lib
-
-SOURCEPATH ../ext/camera
-SOURCE		cameramodule.cpp
-SOURCE		takephoto.cpp
+SOURCEPATH    ../ext/socket/
+SOURCE        e32Socketmodule.cpp
+SOURCE        apselection.cpp
 #endif
 
-#define HAVE_MODULE_RECORDER
-#ifdef HAVE_MODULE_RECORDER
-// recorder
-LIBRARY	mediaclientaudio.lib
 
-SOURCEPATH ../ext/recorder/
-source  recordadapter.cpp
-source  recordermodule.cpp
+#ifdef HAVE_MODULE_CAMERA
+MACRO  HAVE_MODULE_CAMERA
+LIBRARY       ecam.lib 
+LIBRARY       mediaclientvideo.lib 
+LIBRARY       mmfcontrollerframework.lib
+SOURCEPATH    ../ext/camera
+SOURCE        cameramodule.cpp
+SOURCE        takephoto.cpp
+#endif
+
+
+#ifdef HAVE_MODULE_RECORDER
+MACRO  HAVE_MODULE_RECORDER
+LIBRARY       mediaclientaudio.lib
+SOURCEPATH    ../ext/recorder/
+SOURCE        recordadapter.cpp
+SOURCE        recordermodule.cpp
 #endif
 
 
@@ -376,14 +358,14 @@ source  recordermodule.cpp
 //#endif
 //LIBRARY etel.lib
 //SOURCEPATH ../ext/location/
-//source		location.cpp  
+//SOURCE        location.cpp  
 //#ifdef EKA2
-//source asynccallhandler_location.cpp
+//SOURCE asynccallhandler_location.cpp
 //#endif
 
 // _locationacq
 //LIBRARY lbs.lib // location acquisition
 //SOURCEPATH ../ext/gps/
-//source		locationacqmodule.cpp
-//source		posdatafetcher.cpp
+//SOURCE        locationacqmodule.cpp
+//SOURCE        posdatafetcher.cpp
 
