@@ -35,6 +35,8 @@
 #include "osdefs.h"
 #include "python_globals.h"
 
+#include <e32svr.h>
+
 const TInt KHeapSize = 16000000;
 
 //NTD - won't be required for static deployment
@@ -224,14 +226,18 @@ Feature additions:
   Extensions" of the API Reference.
   
   IMPORTANT NOTE:
-  I am removing this as this won't be required for this use case,
-  but mainly because it contains Dll::Tls()
-  See PyS60 v1.4.5 docs for more information.
+  After researching the topic, I found a workaround for using Dll::Tls()
+  in EXE targets. However, using the same workaround in other files like
+  "sysinfomodule.cpp", "e32socketmodule.cpp", "location.cpp" etc. is
+  causing issues. I believe this is because these modules used to be
+  separate DLL (PYD) files, having their own thread and respective TLS space,
+  and now the target EXE shares TLS space between them. This change along
+  with "python_globals.cpp" updates seem to make threading work.
 */
-/*
+
 EXPORT_C void CSPyInterpreter::InitializeForeignThread()
 {
-  __ASSERT_ALWAYS(!Dll::Tls(), 
+  __ASSERT_ALWAYS(!UserSvr::DllTls(RThread().Handle()), 
 		  User::Panic(_L("CSPyInterpreter"), 7));
   SPy_tls_initialize((SPy_Python_globals *)iPrivate);
 }
@@ -244,12 +250,11 @@ static inline TBool is_main_thread()
 
 EXPORT_C void CSPyInterpreter::FinalizeForeignThread()
 {
-  __ASSERT_ALWAYS(Dll::Tls() && !is_main_thread(),
+  __ASSERT_ALWAYS(UserSvr::DllTls(RThread().Handle()) && !is_main_thread(),
 		  User::Panic(_L("CSPyInterpreter"), 8));
   PyThread_exit_thread();
   SPy_tls_finalize(0); // don't destroy globals
 }
-*/
 
 EXPORT_C TInt CSPyInterpreter::RunScript(int argc, char** argv)
 {
