@@ -895,7 +895,8 @@ void CObjectExchangeClient::StopL()
     obexClient->Abort();
     iState = EDone;
   }
-  iBTSearcher->WriteNotStatus(EFalse);
+  // fix: removed iBTSearcher->WriteNotStatus(EFalse); 
+  // we must let the BTSearcher destructor read the true state
 }
 
 void CObjectExchangeClient::Disconnect()
@@ -917,7 +918,7 @@ void CObjectExchangeClient::Disconnect()
       CActiveScheduler::Start();
 #endif
       Py_END_ALLOW_THREADS
-      iBTSearcher->WriteNotStatus(EFalse);
+      // fix: removed iBTSearcher->WriteNotStatus(EFalse);
     }
 
   error = iStatus.Int();
@@ -3762,7 +3763,11 @@ PyObject* discovery(const int type, char* addr, int &addrL)
   if(addrL < MaxIPAddrLength) {
      error = BTDD.aBTObjExCl->DevServResearch();
      if (error != KErrNone) 
+     { // fix: this might prevent memory and handle leak on failure/abort
+       delete BTDD.aBTObjExCl;
+       BTDD.aBTObjExCl = NULL;
        return PySocket_Err(error);
+     }
 
      BTDD.address = BTDD.aBTObjExCl->iBTSearcher->aResponse().BDAddr();
      BTDD.port    = BTDD.aBTObjExCl->iBTSearcher->Port();
@@ -3790,7 +3795,11 @@ PyObject* discovery(const int type, char* addr, int &addrL)
 
      error = BTDD.aBTObjExCl->ServiceResearch(address.BTAddr());
      if (error != KErrNone) 
+     { // fix: this might prevent memory and handle leak on failure/abort
+       delete BTDD.aBTObjExCl;
+       BTDD.aBTObjExCl = NULL;
        return PySocket_Err(error);
+     }
 
      PyObject* servicesDictionary = createDictionary(BTDD);
      delete BTDD.aBTObjExCl;
