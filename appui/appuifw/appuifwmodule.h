@@ -125,6 +125,8 @@ _LIT8(KCheckmarkStyle, "checkmark");
 #define MY_APPUI ((get_app())->ob_data->appui)
 enum ListboxType {ESingleListbox, EDoubleListbox, ESingleGraphicListbox, EDoubleGraphicListbox };
 
+IMPORT_C TBool TouchEnabled();
+
 /*
  * Python types defined in this module
  */

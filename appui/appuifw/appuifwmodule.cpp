@@ -148,6 +148,13 @@ struct Application_data {
   CAppuifwFocusCallback ob_focus_cb;
 };
 
+TBool touch_enabled_flag;
+
+EXPORT_C TBool TouchEnabled()
+{
+    return touch_enabled_flag;
+}
+
 /*
  * An utility for obtaining the Application object
  */
@@ -274,6 +281,25 @@ SPy_S60app_New()
 #endif
   CEikonEnv* env = CEikonEnv::Static();
   CAmarettoAppUi* appui = STATIC_CAST(CAmarettoAppUi*, env->EikAppUi());
+
+
+  // set "touch_enabled_flag" for later use
+  // PenEnabled() is not present in 3rdEd SDK, so we try to load avkon and
+  // find the ordinal number for that function
+  RLibrary avkonDll;
+  touch_enabled_flag = EFalse;
+  if (avkonDll.Load(_L("avkon.dll")) == KErrNone) {
+    #ifdef __WINS__
+    TLibraryFunction pen_enabled = avkonDll.Lookup( PEN_ENABLED_ORDINAL_WINS );
+    #else
+    TLibraryFunction pen_enabled = avkonDll.Lookup( PEN_ENABLED_ORDINAL_ARM );
+    #endif
+    if (pen_enabled != NULL && pen_enabled()) {
+      touch_enabled_flag = ETrue;
+    }
+    avkonDll.Close();
+  }
+
 
   TInt error;
   const TDesC* title;
@@ -2720,25 +2746,13 @@ available_fonts(PyObject* /*self*/)
 extern "C" PyObject *
 touch_enabled(PyObject* /*self*/)
 {
-  PyObject* rval = Py_False;
-  RLibrary avkonDll;
+  PyObject *ret = Py_False;
 
-  /* PenEnabled() is not present in 3rdEd SDK, so we try to load avkon and
-   * find the ordinal number for that function */
-  if ( avkonDll.Load( _L( "avkon.dll" ) ) == KErrNone ) {
-    #ifdef __WINS__
-    TLibraryFunction pen_enabled = avkonDll.Lookup( PEN_ENABLED_ORDINAL_WINS );
-    #else
-    TLibraryFunction pen_enabled = avkonDll.Lookup( PEN_ENABLED_ORDINAL_ARM );
-    #endif
-    if (pen_enabled != NULL) {
-      if (pen_enabled())
-        rval = Py_True;
-    }
-    avkonDll.Close();   
-  }
-  Py_INCREF(rval);
-  return rval;
+  if (touch_enabled_flag)
+      ret = Py_True;
+
+  Py_INCREF(ret);
+  return ret;
 }
 
 
@@ -3478,7 +3492,6 @@ protected:
 private:
   const CCoeControl *myParent;
   CAmarettoAppUi* myAppui;
-  TBool touch_enabled_flag;
   virtual void Draw(const TRect& aRect) const;
   virtual void HandlePointerEventL(const TPointerEvent& aPointerEvent);
   virtual TKeyResponse OfferKeyEventL(const TKeyEvent& aKeyEvent, 
@@ -3565,12 +3578,10 @@ void CAppuifwCanvas::ConstructL(const TRect& aRect,
   __ASSERT_DEBUG(aParent, User::Panic(_L("CAppuifwCanvas"), 2)); // This control must have a parent.
   CreateWindowL(aParent);
   
-  if(touch_enabled(NULL)){
+  if(touch_enabled_flag){
     EnableDragEvents();
-    touch_enabled_flag = ETrue;
   }
-  else
-	touch_enabled_flag = EFalse;
+
   myParent = aParent;
   myAppui = aAppui;
   SetRect(aRect);
@@ -5168,7 +5179,7 @@ extern "C" {
     {"multi_query", (PyCFunction)Multi_line_data_query_dialog, METH_VARARGS, NULL},
     {"popup_menu", (PyCFunction)popup_menu, METH_VARARGS, NULL},
     {"available_fonts", (PyCFunction)available_fonts, METH_NOARGS, NULL},
-	{"touch_enabled", (PyCFunction)touch_enabled, METH_NOARGS, NULL},
+    {"touch_enabled", (PyCFunction)touch_enabled, METH_NOARGS, NULL},
     {"Form", (PyCFunction)new_Form_object, METH_VARARGS|METH_KEYWORDS, NULL},
     {"Text", (PyCFunction)new_Text_object, METH_VARARGS, NULL},
     {"Canvas", (PyCFunction)new_Canvas_object, METH_VARARGS, NULL},

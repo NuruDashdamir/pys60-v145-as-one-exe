@@ -171,7 +171,7 @@ void CAmarettoContainer::DisablePointerForwarding(TBool aValue)
 void CAmarettoContainer::HandlePointerEventL(const TPointerEvent& aPointerEvent)
 {
     // Check if touch is enabled or not
-    if( !touch_enabled(NULL) ) {
+    if(!touch_enabled_flag) {
         return;
     }
     if (iTop && iEventCallback) {

@@ -33,13 +33,7 @@
 #include "Python_appui.h"
 #include "symbian_python_ext_util.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-int touch_enabled(PyObject *);
-#ifdef __cplusplus
-}
-#endif
+extern TBool touch_enabled_flag;
 
 #ifndef EKA2
 class CAmarettoContainer : public CCoeControl, MCoeControlObserver
