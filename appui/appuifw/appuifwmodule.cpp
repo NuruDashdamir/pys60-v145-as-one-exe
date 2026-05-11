@@ -3626,6 +3626,7 @@ CAppuifwCanvas::SizeChanged()
     }
     PyObject *pyrectsize=Py_BuildValue("((ii))", Rect().Width(), Rect().Height());
     app_callback_handler( iResizeCallback, pyrectsize);
+    Py_DECREF(pyrectsize); // fix: memory leak - NTD
   	if (!in_interpreter) {
         PyEval_SaveThread();
     }
