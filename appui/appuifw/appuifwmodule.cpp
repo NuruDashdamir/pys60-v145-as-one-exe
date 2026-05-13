@@ -3549,20 +3549,21 @@ void CAppuifwCanvas::HandlePointerEventL(const TPointerEvent& aPointerEvent)
 
   if (!iEventCallback) 
     return;
+
+  PyEval_RestoreThread(PYTHON_TLS->thread_state);
   arg = Py_BuildValue("({s:i, s:(ii), s:i})", "type", aPointerEvent.iType
   		+ 0x101, "pos", aPointerEvent.iPosition.iX,
   		aPointerEvent.iPosition.iY, "modifiers", aPointerEvent.iModifiers);
   if (!arg) {
     PyErr_Print();
-	return;
-  }
-  PyEval_RestoreThread(PYTHON_TLS->thread_state);
+  } else {
   ret = PyEval_CallObject(iEventCallback, arg);
   Py_DECREF(arg);
   if (!ret)
     PyErr_Print();
   else
     Py_DECREF(ret);
+  }
   PyEval_SaveThread();
 }
 
