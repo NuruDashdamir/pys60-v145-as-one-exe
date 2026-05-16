@@ -141,7 +141,12 @@ TInt CAppuifwEventBindingArray::Callback(SAmarettoEventInfo& aEv)
 	i = iKey.Count() - 1;
     while (i >= 0) {
       if (CheckEventBinding(iKey[i], aEv))
-        return app_callback_handler(iKey[i].iCb, Py_BuildValue("((ii))", aEv.iPointerEvent.iPosition.iX, aEv.iPointerEvent.iPosition.iY));
+      { // fix: previously Py_BuildValue leaked memory here - NTD
+        PyObject* eventcoords = Py_BuildValue("((ii))", aEv.iPointerEvent.iPosition.iX, aEv.iPointerEvent.iPosition.iY);
+        TInt result = app_callback_handler(iKey[i].iCb, eventcoords);
+        Py_DECREF(eventcoords);
+        return result;
+      }
       i--;
     }
     break;
