@@ -1520,8 +1520,10 @@ static TInt Listbox_create_itemslist(ListboxType lb_type,
         else {
           temp.Copy(KSeparatorTab);
         }
-        temp.Append(PyUnicode_AsUnicode(RemoveTabs(s)),
+        PyObject* temp_pyobj = RemoveTabs(s);
+        temp.Append(PyUnicode_AsUnicode(temp_pyobj),
                     Min(PyUnicode_GetSize(s), KMaxFileName));
+        Py_DECREF(temp_pyobj);
       }
     }
     else if (lb_type == EDoubleListbox) {
@@ -1542,11 +1544,15 @@ static TInt Listbox_create_itemslist(ListboxType lb_type,
             temp.Copy(KSeparatorTab);
           }
           
-          temp.Append(PyUnicode_AsUnicode(RemoveTabs(s1)),
+          PyObject* temp_pyobj_1 = RemoveTabs(s1);
+          PyObject* temp_pyobj_2 = RemoveTabs(s2);
+          temp.Append(PyUnicode_AsUnicode(temp_pyobj_1),
                       Min(PyUnicode_GetSize(s1), KMaxFileName));
           temp.Append(KSeparatorTab);
-          temp.Append(PyUnicode_AsUnicode(RemoveTabs(s2)),
+          temp.Append(PyUnicode_AsUnicode(temp_pyobj_2),
                       Min(PyUnicode_GetSize(s2), KMaxFileName));
+          Py_DECREF(temp_pyobj_1);
+          Py_DECREF(temp_pyobj_2);
 
         }
       }
@@ -1571,7 +1577,9 @@ static TInt Listbox_create_itemslist(ListboxType lb_type,
             temp.AppendNum(i);
             temp.Append(KSeparatorTab);
 	       }
-        temp.Append(PyUnicode_AsUnicode(RemoveTabs(s1)), Min(PyUnicode_GetSize(s1), KMaxFileName));
+        PyObject* temp_pyobj_1 = RemoveTabs(s1);
+        temp.Append(PyUnicode_AsUnicode(temp_pyobj_1), Min(PyUnicode_GetSize(s1), KMaxFileName));
+        Py_DECREF(temp_pyobj_1);
         }
 
         // error in argument:
@@ -1633,9 +1641,13 @@ static TInt Listbox_create_itemslist(ListboxType lb_type,
             temp.AppendNum(i);
             temp.Append(KSeparatorTab);
           }   
-          temp.Append(PyUnicode_AsUnicode(RemoveTabs(s1)), Min(PyUnicode_GetSize(s1), KMaxFileName));
+          PyObject* temp_pyobj_1 = RemoveTabs(s1);
+          PyObject* temp_pyobj_2 = RemoveTabs(s2);
+          temp.Append(PyUnicode_AsUnicode(temp_pyobj_1), Min(PyUnicode_GetSize(s1), KMaxFileName));
           temp.Append(KSeparatorTab);
-          temp.Append(PyUnicode_AsUnicode(RemoveTabs(s2)), Min(PyUnicode_GetSize(s2), KMaxFileName));
+          temp.Append(PyUnicode_AsUnicode(temp_pyobj_2), Min(PyUnicode_GetSize(s2), KMaxFileName));
+          Py_DECREF(temp_pyobj_1);
+          Py_DECREF(temp_pyobj_2);
 
         }
   
