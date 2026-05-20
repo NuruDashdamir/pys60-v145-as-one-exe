@@ -1806,6 +1806,7 @@ new_Listbox_object(PyObject* /*self*/, PyObject *args)
           ((CAknDoubleLargeStyleListBox*)op->ob_control)->
             ConstructL(cont, EAknListBoxSelectionList);
       });
+      op->ob_control->ActivateL(); // fix: Listbox not redrawing on scroll - NTD
   }
 
   CDesCArray *items_list = NULL;
