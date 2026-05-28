@@ -1926,6 +1926,8 @@ Listbox_set_list(Listbox_object *self, PyObject *args)
           Model()->SetItemTextArray(items_list);
       else
         if (self->ob_lb_type == ESingleGraphicListbox) {
+    ((CAknColumnListBox*)self->ob_control)->ItemDrawer()->ColumnData()->IconArray()->ResetAndDestroy();
+    delete ((CAknColumnListBox*)self->ob_control)->ItemDrawer()->ColumnData()->IconArray();
 	  if (self->ob_icons != NULL) 
 	    ((CAknColumnListBox*)self->ob_control)->ItemDrawer()->ColumnData()->SetIconArray(self->ob_icons);  
           ((CAknSingleGraphicStyleListBox*)self->ob_control)->Model()->SetItemTextArray(items_list);    
